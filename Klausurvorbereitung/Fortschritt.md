@@ -8,7 +8,7 @@ Legende: 🟢 sitzt · 🟡 wackelig · 🔴 wiederholen · ⬜ noch nicht geüb
 |---|-------|:------:|---------------|---------|
 | 01 | Einführung: Neuron vs. Computer, Membran, Ruhepotential, RC-Modell | 🟡 | 2026-07-20 | Von-Neumann-Flaschenhals & in-memory computing sitzt gut. RC-Modell, GHK, Tau-m verstanden. Wiederholen: dynamisches Gleichgewicht (Pumpe-Diffusion-Gleichgewicht), genaue Abgrenzung Nernst vs. GHK, Neuron-Doktrin. |
 | 02 | Aktionspotential & Hodgkin-Huxley-Modell | 🟢 | 2026-07-20 | MC 10 von 11 richtig. Freitext-Fragen alle gut: positive Rückkopplung verstanden, m und h Gating, absolute und relative Refraktärzeit, post-inhibitorischer Rebound-Spike, f-I-Kurve Typ II, Rheobase als Typ-II-Eigenschaft. Voltage-Clamp komplett rausgenommen (nicht klausurrelevant). |
-| 03 | LIF-Modell & 2D-Neuronmodelle | ⬜ | – | |
+| 03 | LIF-Modell & 2D-Neuronmodelle | 🟡 | 2026-07-20 | MC 9/10 richtig (3.4 zu BrainScaleS außer Wertung). Nur 3.5 falsch: LIF ist Typ I, nicht Typ II — Verwechslung mit HH (Typ II). Freitext-Fragen noch offen. |
 | 04 | Synapsen & synaptische Übertragung | ⬜ | – | |
 | 05 | Synapsenmodelle: COBA/CUBA, exp. Synapsen, High-Conductance-State | ⬜ | – | |
 | 06 | Statistik von Spike-Trains: Poisson, ISI, CV, PSTH | ⬜ | – | |
