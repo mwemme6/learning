@@ -1,0 +1,118 @@
+@page {
+  size: A4;
+  margin: 1.8cm 1.9cm 2.0cm 1.9cm;
+  @bottom-center {
+    content: "Brain-Inspired Computing – Klausurvorbereitung";
+    font-family: "DejaVu Sans"; font-size: 7.5pt; color: #999;
+  }
+  @bottom-right {
+    content: counter(page) " / " counter(pages);
+    font-family: "DejaVu Sans"; font-size: 7.5pt; color: #999;
+  }
+}
+
+body {
+  font-family: "DejaVu Serif", serif;
+  font-size: 10.5pt;
+  line-height: 1.45;
+  color: #1a1a1a;
+}
+
+h1 {
+  font-family: "DejaVu Sans", sans-serif;
+  font-size: 19pt;
+  color: #16324f;
+  border-bottom: 3px solid #16324f;
+  padding-bottom: 6px;
+  margin-bottom: 2px;
+}
+h1 + p.sub {
+  font-family: "DejaVu Sans"; font-size: 9pt; color: #6a7a88;
+  margin-top: 0; margin-bottom: 14px;
+}
+
+h2 {
+  font-family: "DejaVu Sans", sans-serif;
+  font-size: 13pt;
+  color: #ffffff;
+  background: #2e6b8f;
+  padding: 5px 10px;
+  border-radius: 4px;
+  margin-top: 22px;
+}
+h3 {
+  font-family: "DejaVu Sans", sans-serif;
+  font-size: 11.5pt;
+  color: #16324f;
+  border-left: 4px solid #6fb1d6;
+  padding-left: 8px;
+  margin-top: 16px;
+}
+
+a { color: #2e6b8f; text-decoration: none; }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 9.3pt;
+  margin: 10px 0;
+}
+th {
+  background: #16324f; color: #fff;
+  font-family: "DejaVu Sans"; font-weight: bold;
+  padding: 5px 7px; text-align: left;
+}
+td { border: 1px solid #cbd6de; padding: 4px 7px; vertical-align: top; }
+tr:nth-child(even) td { background: #f2f6f9; }
+
+code, .formula {
+  font-family: "DejaVu Sans Mono", monospace;
+  font-size: 9.6pt;
+  background: #eef3f6;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+blockquote {
+  border-left: 4px solid #e0a83c;
+  background: #fdf7ec;
+  margin: 10px 0; padding: 8px 12px;
+  font-size: 10pt;
+}
+
+/* Boxes via fenced div (pandoc :::) */
+.ref {
+  background: #f4f8fa; border: 1px solid #cfe0ea;
+  border-radius: 5px; padding: 8px 12px; margin: 12px 0;
+  font-size: 9.2pt; font-family: "DejaVu Sans";
+}
+.ref strong { color: #16324f; }
+
+.mc {
+  background: #eef7f0; border: 1px solid #bfe0c8;
+  border-radius: 5px; padding: 10px 14px; margin: 10px 0;
+}
+.mc-title, .open-title {
+  font-family: "DejaVu Sans"; font-weight: bold; color: #1d6b3a;
+}
+.open {
+  background: #fdf3f0; border: 1px solid #f0c6b8;
+  border-radius: 5px; padding: 10px 14px; margin: 10px 0;
+}
+.open-title { color: #b0491f; }
+
+.solution {
+  font-size: 9.2pt; color: #33553f; font-family: "DejaVu Sans";
+  border-top: 1px dashed #9fc9ab; margin-top: 8px; padding-top: 6px;
+}
+
+.keybox {
+  background: #16324f; color: #eaf2f8;
+  border-radius: 6px; padding: 10px 14px; margin: 12px 0;
+  font-size: 9.6pt;
+}
+.keybox strong { color: #ffd77a; }
+
+ul, ol { margin: 6px 0 6px 0; padding-left: 20px; }
+li { margin: 2px 0; }
+hr { border: none; border-top: 1px solid #d5dee5; margin: 18px 0; }
