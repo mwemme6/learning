@@ -42,6 +42,12 @@ Sei ehrlich: lieber 🟡/🔴 setzen, damit Malte weiß, was er wiederholen muss
   `python3 quellen_md/build.py <NN>` (z. B. `07`) — oder ohne Argument für alle.
 - Änderungen an Fakten immer gegen Folien (`../lectures/`) prüfen.
 
+### 4. Git-Workflow — nur auf main
+- Es soll **nur auf `main`** committet werden — keine dauerhaften Feature-Branches.
+- Falls aus technischen Gründen (z. B. Isolation in Hintergrund-Sessions) doch ein
+  Branch/PR entsteht: den PR sofort selbst mergen und den Branch löschen, sodass am
+  Ende nur `main` übrig bleibt.
+
 ## Konventionen
 - Sprache: **Deutsch**, Fachbegriffe englisch wo üblich (spike, firing rate …).
 - Formeln: Unicode + HTML `<sub>/<sup>` (kein LaTeX-Math, da weasyprint kein JS rendert).
