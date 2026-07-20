@@ -7,7 +7,7 @@ Legende: 🟢 sitzt · 🟡 wackelig · 🔴 wiederholen · ⬜ noch nicht geüb
 | # | Thema | Status | Zuletzt geübt | Notizen |
 |---|-------|:------:|---------------|---------|
 | 01 | Einführung: Neuron vs. Computer, Membran, Ruhepotential, RC-Modell | 🟡 | 2026-07-20 | Von-Neumann-Flaschenhals & in-memory computing sitzt gut. RC-Modell, GHK, Tau-m verstanden. Wiederholen: dynamisches Gleichgewicht (Pumpe-Diffusion-Gleichgewicht), genaue Abgrenzung Nernst vs. GHK, Neuron-Doktrin. |
-| 02 | Aktionspotential & Hodgkin-Huxley-Modell | ⬜ | – | |
+| 02 | Aktionspotential & Hodgkin-Huxley-Modell | 🟡 | 2026-07-20 | MC-Fragen (Claude Code): 10/11 richtig. Nur MC 2.8 falsch (Anzahl ODEs: 5, nicht 3 — m, h, n + u + Reiz). Freitext-Fragen noch offen, werden per Sprachbot besprochen. |
 | 03 | LIF-Modell & 2D-Neuronmodelle | ⬜ | – | |
 | 04 | Synapsen & synaptische Übertragung | ⬜ | – | |
 | 05 | Synapsenmodelle: COBA/CUBA, exp. Synapsen, High-Conductance-State | ⬜ | – | |
