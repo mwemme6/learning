@@ -7,7 +7,7 @@ Legende: 🟢 sitzt · 🟡 wackelig · 🔴 wiederholen · ⬜ noch nicht geüb
 | # | Thema | Status | Zuletzt geübt | Notizen |
 |---|-------|:------:|---------------|---------|
 | 01 | Einführung: Neuron vs. Computer, Membran, Ruhepotential, RC-Modell | 🟡 | 2026-07-20 | Von-Neumann-Flaschenhals & in-memory computing sitzt gut. RC-Modell, GHK, Tau-m verstanden. Wiederholen: dynamisches Gleichgewicht (Pumpe-Diffusion-Gleichgewicht), genaue Abgrenzung Nernst vs. GHK, Neuron-Doktrin. |
-| 02 | Aktionspotential & Hodgkin-Huxley-Modell | 🟡 | 2026-07-20 | MC-Fragen (Claude Code): 10/11 richtig. Nur MC 2.8 falsch (Anzahl ODEs: 5, nicht 3 — m, h, n + u + Reiz). Freitext-Fragen noch offen, werden per Sprachbot besprochen. |
+| 02 | Aktionspotential & Hodgkin-Huxley-Modell | 🟢 | 2026-07-20 | MC 10 von 11 richtig. Freitext-Fragen alle gut: positive Rückkopplung verstanden, m und h Gating, absolute und relative Refraktärzeit, post-inhibitorischer Rebound-Spike, f-I-Kurve Typ II, Rheobase als Typ-II-Eigenschaft. Voltage-Clamp komplett rausgenommen (nicht klausurrelevant). |
 | 03 | LIF-Modell & 2D-Neuronmodelle | ⬜ | – | |
 | 04 | Synapsen & synaptische Übertragung | ⬜ | – | |
 | 05 | Synapsenmodelle: COBA/CUBA, exp. Synapsen, High-Conductance-State | ⬜ | – | |
@@ -20,6 +20,7 @@ Legende: 🟢 sitzt · 🟡 wackelig · 🔴 wiederholen · ⬜ noch nicht geüb
 
 ## Session-Log
 _(neuste_zuerst)
+- 2026-07-20, Sprach-Session mit Claude — Kapitel 2 durchgearbeitet. MC-Fragen übersprungen (bereits 10/11 richtig, nur 2.8 wiederholt). Freitext-Fragen: alle 5 Fragen gut beantwortet (positive Rückkopplung, m/h-Gating, Refraktärzeiten, Rebound-Spike, f-I-Kurve Typ II, Rheobase). Voltage-Clamp aus Priorisierung rausgenommen.
 - **_(noch keine Session)_** — Material erstellt am 2026-07-20.
 - 2026-07-20, Sprach-Session mit Claude — Kapitel 1 durchgearbeitet. MC-Fragen übersprungen (bereits bearbeitet). Freitext-Fragen: 5 von 8 gut beantwortet (Fragen 1, 3, 4, 6, 7). Fragen 2, 5, 8 wiederholen.
 
