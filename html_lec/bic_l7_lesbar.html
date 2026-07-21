@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIC Lecture 7 – Neural coding, correlations &amp; spike-triggered average</title>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1c2530;--muted:#5b6875;--accent:#2f6db0;--accent-soft:#eaf2fb;--line:#e2e6eb;--note:#f0f7f0;--note-border:#57a05a;--note-ink:#2f5d32;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;font-size:17px;}
+  .wrap{max-width:820px;margin:0 auto;padding:32px 20px 80px;}
+  header.top{text-align:center;padding:28px 20px;margin-bottom:28px;background:linear-gradient(135deg,#2f6db0,#3f8ac9);color:#fff;border-radius:16px;}
+  header.top .kicker{font-size:14px;letter-spacing:.14em;text-transform:uppercase;opacity:.9;}
+  header.top h1{margin:8px 0 4px;font-size:26px;} header.top .sub{opacity:.92;font-size:15px;}
+  nav.toc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:30px;}
+  nav.toc h2{margin:0 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}
+  nav.toc ol{margin:0;padding-left:20px;} nav.toc a{color:var(--accent);text-decoration:none;} nav.toc a:hover{text-decoration:underline;}
+  section.slide{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 26px;margin-bottom:22px;box-shadow:0 1px 3px rgba(20,30,45,.04);}
+  .slidenum{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:20px;margin-bottom:10px;}
+  section.slide h2{margin:2px 0 14px;font-size:22px;color:var(--ink);border-bottom:2px solid var(--accent-soft);padding-bottom:8px;}
+  section.slide h3{margin:20px 0 8px;font-size:17px;color:var(--accent);}
+  ul,ol.q{margin:8px 0;padding-left:22px;} li{margin:5px 0;} p{margin:8px 0;}
+  .arrow{color:var(--accent);font-weight:700;}
+  .note{background:var(--note);border-left:4px solid var(--note-border);border-radius:6px;padding:10px 14px;margin:12px 0;font-size:15.5px;color:var(--note-ink);}
+  .eqbox{background:#fbfcfd;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:6px;padding:6px 14px;margin:12px 0;overflow-x:auto;}
+  .keybox{background:#fff8e8;border:1px solid #e8d48a;border-left:4px solid #d9a520;border-radius:6px;padding:6px 14px;margin:12px 0;overflow-x:auto;}
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">Brain Inspired Computing · Lecture 7</div>
+  <h1>Neural coding, correlations &amp; spike-triggered average</h1>
+  <div class="sub">Prof. Dr. Johannes Schemmel — lesbare Fassung der Vorlesungsnotizen</div>
+</header>
+
+<nav class="toc">
+  <h2>Inhalt</h2>
+  <ol>
+    <li><a href="#s1">Recap: neural coding and decoding</a></li>
+    <li><a href="#s2">Recap: PSTH</a></li>
+    <li><a href="#s3">Typical questions (Encoding/Decoding)</a></li>
+    <li><a href="#s4">Auto- and cross-correlation</a></li>
+    <li><a href="#s5">Beispiel-Plots · ACF ↔ ISI</a></li>
+    <li><a href="#s6">Intuitive examples for ACFs</a></li>
+    <li><a href="#s7">Renewal process</a></li>
+    <li><a href="#s8">ACF &amp; Power Spectral Density</a></li>
+    <li><a href="#s9">Referenz: LGN power spectra</a></li>
+    <li><a href="#s10">Returning to the original questions</a></li>
+    <li><a href="#s11">Decoding: Spike-triggered average (Idee)</a></li>
+    <li><a href="#s12">STA – Herleitung</a></li>
+    <li><a href="#s13">STA – Whitenoise-Beispiel (Bild)</a></li>
+    <li><a href="#s14">STA – reales Beispiel (Eigenmannia)</a></li>
+  </ol>
+</nav>
+
+<section class="slide" id="s1">
+  <span class="slidenum">Folie 1</span>
+  <h2>Recap: neural coding and decoding</h2>
+  <p>Ein Signal \(x(t)\) geht (mit Rauschen) in ein neuronales System und erzeugt eine Antwort \(y(t)\) bzw. einen Spike-Train \(\rho(t)\).</p>
+  <ul>
+    <li>\(x(t)\) kann ein Spike-Train, ein Strom oder ein abstrakter Stimulus (Film, Ton) sein.</li>
+    <li>Durch Wiederholung erhält man das <b>PSTH</b>, zentriert um den Stimulus-Onset.</li>
+    <li>Wegen Trial-Variabilität schätzt man eine Feuerrate \(\nu(t)=\lim_{\delta t\to0}\left\langle n_{spk}(t,t+\delta t)/\delta t\right\rangle_{\text{trials}}\).</li>
+  </ul>
+  <div class="note"><b>Einordnung:</b> Wiederholung aus Lecture 6 als Ausgangspunkt. Diese Vorlesung liefert die <b>mathematischen Werkzeuge</b> (Korrelation, Leistungsspektrum, STA), um Encoding und Decoding quantitativ zu untersuchen.</div>
+</section>
+
+<section class="slide" id="s2">
+  <span class="slidenum">Folie 2</span>
+  <h2>Recap: Peri-Stimulus-Time-Histogram (PSTH)</h2>
+  <p>Raster-Plot (jede Zeile = ein Trial, jeder Strich = ein Spike) über dem summierenden Histogramm. Stimulus-Onset bei \(t=0\): niedrige Grundrate davor, deutlicher Feuerraten-Peak danach.</p>
+  <div class="note"><b>Erklärung:</b> Das PSTH macht die stimulusgetriebene Feuerrate \(\nu(t)\) sichtbar — Grundlage für die folgenden Fragen zur Informationsübertragung.</div>
+</section>
+
+<section class="slide" id="s3">
+  <span class="slidenum">Folie 3</span>
+  <h2>Typical questions</h2>
+  <ol class="q">
+    <li>Wir beobachten ein Neuron mit einer bestimmten \(p_{isi}(s)\) während <b>spontaner</b> Aktivität. Welche Signale \(y(t)\) kann so ein Neuron sinnvoll übertragen?</li>
+    <li>Wir beobachten eine Antwort \(\langle p_{isi}(s|x)\rangle_{\{x\}}\) auf ein Stimulus-Set \(\{x\}\). Ist das Neuron gut geeignet, Information über den Stimulus zu übertragen?</li>
+    <li>Wir beobachten ein Eingangssignal \(x(t)\) und die evozierte Antwort \(\rho(t)\):
+      <ul>
+        <li><b>(A)</b> Können wir das Signal aus der Antwort rekonstruieren? (<b>Decoding</b>)</li>
+        <li><b>(B)</b> Können wir die Antwort auf zukünftige Stimuli vorhersagen? (<b>Encoding</b>)</li>
+      </ul>
+    </li>
+  </ol>
+  <p><span class="arrow">&rarr;</span> Diese Fragen beruhen auf der <b>zeitlichen Korrelation</b> von \(x(t)\) und dem Spike-Train \(\rho(t)\). (Beispiel: Warland, Reinagel &amp; Meister 1997 — Decoding visueller Information aus retinalen Ganglienzellen.)</p>
+  <div class="note"><b>Erklärung:</b> Die zentrale Größe ist, wie stark Stimulus und Antwort <b>zeitlich zusammenhängen</b>. Deshalb kommen als nächstes Auto-/Kreuzkorrelation und das Leistungsspektrum.</div>
+</section>
+
+<section class="slide" id="s4">
+  <span class="slidenum">Folie 4</span>
+  <h2>Auto- and cross-correlation</h2>
+  <p>Sei \(x_i(t),\, i=1,2,3,\dots\) ein Satz von Signalen.</p>
+  <h3>Cross-correlation function (CCF)</h3>
+  <div class="eqbox">\[ C_{ij}(s) = \lim_{T\to\infty}\frac{1}{2T}\int_{-T}^{T} x_i(t)\,x_j(t+s)\,dt = \langle x_i(t)\,x_j(t+s)\rangle_t \]</div>
+  <p><b>Warum ein Grenzprozess?</b> Unendlich fortlaufende Signale (Spike-Train, Sinus) haben unendliche Energie; ohne Grenzprozess würde das Integral nicht konvergieren. Deshalb bildet man den <b>Zeitmittelwert</b> (Teilen durch \(2T\)).</p>
+  <p>Es gilt: \(C_{ij}(s) = C_{ji}(-s)\).</p>
+  <h3>Auto-correlation function (ACF)</h3>
+  <p>Korreliert man ein Signal mit sich selbst:</p>
+  <div class="eqbox">\[ C_{ii}(s) = \lim_{T\to\infty}\frac{1}{2T}\int_{-T}^{T} x_i(t)\,x_i(t+s)\,dt = \langle x_i(t)\,x_i(t+s)\rangle_t \]</div>
+  <p>Insbesondere: \(C_{ii}(s) = C_{ii}(-s)\) <span class="arrow">&rarr;</span> <b>symmetrisch</b>.</p>
+  <div class="note"><b>Erklärung:</b> Die CCF misst, wie ähnlich zwei Signale sind, wenn man eines um \(s\) verschiebt. Die ACF ist der Spezialfall „Signal mit sich selbst“ und zeigt, wie stark ein Signal mit seiner eigenen Vergangenheit zusammenhängt (zeitliche Struktur/Periodizität).</div>
+</section>
+
+<section class="slide" id="s5">
+  <span class="slidenum">Folie 5</span>
+  <h2>Beispiel-Plots · Zusammenhang ACF ↔ ISI</h2>
+  <p>Links: ein verrauschtes Signal \(x\) und seine ACF (mit Signifikanzgrenzen). Rechts (aus dem Buch „Spikes“): Raster-Plot eines Spike-Trains, dessen <b>Autokorrelation</b> (bedingte Rate über \(\Delta t\)) und das zugehörige <b>Interval-Histogramm</b> \(p_{isi}(s)\).</p>
+  <div class="note"><b>Erklärung:</b> ACF und ISI-Verteilung hängen eng zusammen: Beide beschreiben die zeitliche Struktur des Spike-Trains. Der Doppelpfeil in der Folie betont, dass man die eine aus der anderen berechnen kann — das wird auf Folie 8 formalisiert.</div>
+</section>
+
+<section class="slide" id="s6">
+  <span class="slidenum">Folie 6</span>
+  <h2>Intuitive examples for ACFs</h2>
+  <ul>
+    <li>Membranpotential \(u(t)\), getrieben von einem oszillatorischen Input \(\sim\sin(\omega t)\): die ACF \(C_{uu}(s)\) ist selbst <b>oszillatorisch</b> mit Periode \(2\pi/\omega\).</li>
+    <li>Synaptische Leitfähigkeit \(g(t)\) mit exponentiellem Kernel, getrieben von Poisson-Input: die ACF \(C_{gg}(s)\) fällt <b>exponentiell</b> ab mit Zeitkonstante \(\sim\tau_{syn}\).</li>
+    <li>ACF für Spike-Trains \(\rho(t)=\sum_s\delta(t-t_s)\)?
+      <ul>
+        <li>Idee: Binning mit Binbreite \(\delta t\).</li>
+        <li>Für unendlich lange Spike-Trains kann man den Limes \(\delta t\to 0\) nehmen.</li>
+      </ul>
+    </li>
+  </ul>
+  <p>Es gibt einen offensichtlichen Zusammenhang zwischen der ACF \(C_{\rho\rho}(s)\) und der ISI-Verteilung \(p_{isi}(s)\), der im Folgenden untersucht wird.</p>
+  <div class="note"><b>Erklärung:</b> Merkregel: <b>oszillatorischer Input &rarr; oszillatorische ACF</b>; <b>exponentieller Kernel &rarr; exponentielle ACF</b>. Die ACF „erbt“ also die zeitliche Charakteristik des Prozesses.</div>
+</section>
+
+<section class="slide" id="s7">
+  <span class="slidenum">Folie 7</span>
+  <h2>Renewal process</h2>
+  <p>Ein Framework zur Analyse der statistischen Eigenschaften von Spike-Trains — die <b>Verallgemeinerung des Poisson-Prozesses</b>:</p>
+  <ul>
+    <li>Poisson-Prozess: <b>kein</b> Gedächtnis.</li>
+    <li>Renewal-Prozess: Gedächtnis reicht bis zum <b>jüngsten Ereignis</b> (bei LIF löscht der Reset des Membranpotentials das Gedächtnis).</li>
+    <li><span class="arrow">&rarr;</span> vollständig durch \(p_{isi}(s)\) bestimmt.</li>
+  </ul>
+  <p><b>Beispiel:</b> Poisson-Prozess mit absoluter Refraktärperiode:</p>
+  <div class="eqbox">\[ p_{isi}(s) = \Theta(s-\tau_{ref})\,r\,e^{-r(s-\tau_{ref})} \]</div>
+  <p>Mittlere Feuerrate:</p>
+  <div class="keybox">\[ r_{\text{mean}} = \frac{1}{\tau_{ref} + 1/r} \]</div>
+  <div class="note"><b>Erklärung:</b> Beim Renewal-Prozess startet die Statistik nach jedem Spike neu — man braucht nur die ISI-Verteilung \(p_{isi}(s)\). Die absolute Refraktärzeit senkt die effektive mittlere Rate: zur mittleren Wartezeit \(1/r\) kommt die Totzeit \(\tau_{ref}\) hinzu.</div>
+</section>
+
+<section class="slide" id="s8">
+  <span class="slidenum">Folie 8</span>
+  <h2>\(p_{isi}\), ACF \(C_{\rho\rho}(\tau)\) &amp; Power Spectral Density \(\mathcal{P}(\omega)\)</h2>
+  <div class="eqbox">\[ C_{\rho\rho}(\tau) = \langle\rho(t)\rho(t+\tau)\rangle = \nu_0\,\delta(\tau) + \nu_0\,m(\tau) \]</div>
+  <ul>
+    <li>\(\nu_0\,\delta(\tau)\): der „Self-Correlation“-Term (ein Spike korreliert bei Lag 0 immer perfekt mit sich selbst).</li>
+    <li>\(m(\tau)\): die <b>Renewal-Dichte</b> (Intensitätsfunktion) für \(\tau>0\). Sie ist die bedingte Wahrscheinlichkeitsdichte, <b>irgendeinen</b> nachfolgenden Spike zur Zeit \(\tau\) nach einem Referenzspike bei \(\tau=0\) zu beobachten — egal wie viele Spikes dazwischen lagen. \(m(\tau)\) lässt sich aus \(p_{isi}(\tau)\) berechnen.</li>
+  </ul>
+  <p>Mit der Fourier-Transformierten von \(C_{\rho\rho}(\tau)\) erhält man die <b>Power Spectral Density</b> (Wiener-Chintschin-Theorem: die PSD eines stationären Zufallsprozesses ist die Fourier-Transformierte seiner ACF):</p>
+  <div class="eqbox">\[ \mathcal{P}(\omega) = \int_{-\infty}^{\infty} C_{\rho\rho}(\tau)\,e^{-i\omega\tau}\,d\tau = \nu_0\big(1 + \tilde m(i\omega) + \tilde m^{*}(i\omega)\big) \]</div>
+  <p>Mit der Relation zwischen den Fourier-Transformierten von \(p_{isi}\) und \(m\): \(\;\tilde m(i\omega) = \dfrac{\tilde p_{isi}(i\omega)}{1-\tilde p_{isi}(i\omega)}\), folgt:</p>
+  <div class="keybox">\[ \mathcal{P}(\omega) = \nu_0\,\frac{1-\big|\tilde p_{isi}(i\omega)\big|^{2}}{\big|1-\tilde p_{isi}(i\omega)\big|^{2}} \]</div>
+  <div class="note"><b>Erklärung:</b> Das ist das Kernresultat: Aus der ISI-Verteilung \(p_{isi}\) allein bekommt man (über ACF und Fourier) das komplette <b>Leistungsspektrum</b> des Spike-Trains. Damit kann man beurteilen, welche Frequenzen ein Neuron übertragen bzw. verrauschen.</div>
+</section>
+
+<section class="slide" id="s9">
+  <span class="slidenum">Folie 9</span>
+  <h2>Referenz: Leistungsspektren von LGN-Neuronen</h2>
+  <p>Vergleich der Antworten von LGN-Neuronen (Corpus geniculatum laterale) auf <b>natürliche visuelle Stimuli</b> (links) vs. <b>White-Noise-Stimuli</b> (rechts): jeweils ACF (# Spikes über Zeit), Leistungsspektren einzelner Zellen und Zusammenfassung über viele Zellen (51 bzw. 75). Quelle: J. Neurosci. 16(10):3351 (1996).</p>
+  <div class="note"><b>Erklärung:</b> Reales Beispiel für die Theorie von Folie 8. Bei natürlichen Stimuli fällt die Leistung zu hohen Frequenzen ab; bei White Noise sind die Spektren „flacher“/steigen an. Das illustriert, wie sich die Stimulusstatistik im Leistungsspektrum der Antwort niederschlägt.</div>
+</section>
+
+<section class="slide" id="s10">
+  <span class="slidenum">Folie 10</span>
+  <h2>Returning to the original questions</h2>
+  <p><b>Q①:</b> Wird \(p_{isi}(s)\) aus <b>spontaner</b> Aktivität gemessen, heißt \(\mathcal{P}(\omega)\) das <b>Noise-Spektrum</b> des Neurons. Damit ein Signal \(y(t)\) sauber übertragen wird, müssen dessen relevante Komponenten \(\tilde y(\omega)\) <b>stärker</b> sein als \(\mathcal{P}(\omega)\) (<b>Signal-to-Noise-Ratio</b>).</p>
+  <p><b>Q②:</b> Wird \(p_{isi}(s)=\langle p_{isi}(s|x)\rangle_{\{x\}}\) als Antwort auf ein Set relevanter Stimuli gemessen, so zeigt ein <b>flaches (uniformes)</b> Leistungsspektrum \(\mathcal{P}(\omega)\) der Antwort, dass wichtige Aspekte des Stimulus von nachgeschalteten Zellen ausgelesen werden können (<b>„Whitening“</b> / <b>Entropie-Maximierung</b>) — es sei denn, die Antwort-Diversität stammt nur aus Rauschen.</p>
+  <div class="note"><b>Erklärung:</b> Zwei Perspektiven auf dasselbe Spektrum: bei Spontanaktivität ist es <b>Rauschen</b> (begrenzt, was übertragbar ist); bei Stimulus-Antwort ist ein <b>flaches</b> Spektrum gut, weil dann alle Frequenzen gleich gut kodiert sind (effiziente Kodierung).</div>
+</section>
+
+<section class="slide" id="s11">
+  <span class="slidenum">Folie 11</span>
+  <h2>Decoding: The spike-triggered average (STA) — Idee</h2>
+  <p><b>Q③(A):</b> Wie sieht der <b>durchschnittliche Stimulus</b> \(x(t)\) <b>vor</b> einem Spike aus?</p>
+  <div class="eqbox">\[ \text{Def. STA:}\quad C(\tau) = \langle x(t_s-\tau)\rangle_{t_s} \]</div>
+  <p>Vorgehen (Schema aus Rieke et al. 1997): Für jeden Spike nimmt man das Stimulus-Fenster <b>unmittelbar davor</b> und mittelt diese Fenster über alle Spikes. Ergebnis ist die typische Stimulus-Wellenform vor einem Spike.</p>
+  <div class="note"><b>Erklärung:</b> Die STA beantwortet die Decoding-Frage „Worauf reagiert das Neuron?“. Man schaut rückwärts von jedem Spike und mittelt — Merkmale, die konsistent vor Spikes auftreten, bleiben stehen, zufälliges mittelt sich weg.</div>
+</section>
+
+<section class="slide" id="s12">
+  <span class="slidenum">Folie 12</span>
+  <h2>STA – Herleitung</h2>
+  <p>Aus der Definition \(C(\tau)=\langle x(t_s-\tau)\rangle_{t_s}\) folgt (Mittelung über \(N\) Spikes bzw. über die Zeit):</p>
+  <div class="eqbox">\[ C(\tau) = \lim_{T\to\infty}\frac{1}{N}\sum_{s=1}^{N} x(t_s-\tau) = \lim_{T\to\infty}\frac{1}{\nu T}\int \rho(t)\,x(t-\tau)\,dt = \frac{1}{\nu}\langle\rho(t)\,x(t-\tau)\rangle_t = \frac{1}{\nu}\,C_{\rho x}(-\tau) \]</div>
+  <p><b>Kernaussage:</b> Die STA ist (bis auf den Faktor \(1/\nu\)) die <b>Kreuzkorrelation</b> von Spike-Train und Stimulus.</p>
+  <div class="keybox"><b>WARNUNG:</b> Die STA hängt von der <b>Stimulus-Statistik</b> ab, da man nur messen kann, was präsentiert wurde. Für eine unverzerrte Schätzung von \(C(\tau)\) nutzt man daher oft einen <b>White-Noise-Stimulus</b>.</div>
+  <div class="note"><b>Erklärung:</b> Weil White Noise alle Frequenzen gleich enthält, verzerrt er die STA nicht — man erhält die „echte“ Empfindlichkeit des Neurons und nicht nur die Struktur des Stimulus.</div>
+</section>
+
+<section class="slide" id="s13">
+  <span class="slidenum">Folie 13</span>
+  <h2>STA – White-Noise-Beispiel (Bild)</h2>
+  <p>Schema für einen <b>räumlichen</b> Stimulus: Auf dem Bildschirm werden schnell wechselnde Schwarz-Weiß-Muster gezeigt. Für jeden Spike sammelt man die Muster bei \(\tau=-0{,}2\,\mathrm{s}\), \(-0{,}1\,\mathrm{s}\) und \(0\,\mathrm{s}\) davor und mittelt sie getrennt je Zeitverzögerung. Es entsteht die STA als Folge von Bildern — das <b>rezeptive Feld</b> des Neurons zu verschiedenen Zeitpunkten.</p>
+  <div class="note"><b>Erklärung:</b> Erweiterung der STA von 1D (Zeitsignal) auf 2D (Bild). Das Ergebnis zeigt räumlich <b>und</b> zeitlich, welches Muster das Neuron zum Feuern bringt — der Standardweg, rezeptive Felder zu vermessen.</div>
+</section>
+
+<section class="slide" id="s14">
+  <span class="slidenum">Folie 14</span>
+  <h2>STA – reales Beispiel (Eigenmannia)</h2>
+  <p>STA-Stimulus für ein Neuron des elektrosensorischen Seitenlinien-Lobus des schwach elektrischen Fisches <b>Eigenmannia</b>. Oben links: das elektrische Feldpotential (Stimulus), darunter der evozierte Spike-Train. Rechts: die spike-getriggerte Mittelung \(C(\tau)\) über \(\tau\) (ms) — ein charakteristischer biphasischer Verlauf. Quelle: Dayan/Abbott und Gabbiani et al. 1996.</p>
+  <div class="note"><b>Erklärung:</b> Realmessung, die Folie 11/12 bestätigt: Der biphasische STA-Verlauf zeigt, dass das Neuron auf eine bestimmte zeitliche <b>Änderung</b> des Stimulus reagiert (nicht auf einen konstanten Wert) — typisch für sensorische Neuronen.</div>
+</section>
+
+<footer>Brain Inspired Computing · Lecture 7 — lesbare Transkription der handschriftlichen Folien (mit Erklärungen zur Klausurvorbereitung)</footer>
+
+</div>
+</body>
+</html>

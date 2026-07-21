@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIC Lecture 5 – Functional models of synaptic transmission</title>
+<script>
+  window.MathJax = { tex: {inlineMath:[['\\(','\\)']], displayMath:[['\\[','\\]']]}, svg:{fontCache:'global'} };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+  :root{
+    --bg:#f6f7f9; --card:#ffffff; --ink:#1c2530; --muted:#5b6875;
+    --accent:#2f6db0; --accent-soft:#eaf2fb; --line:#e2e6eb;
+    --note:#f0f7f0; --note-border:#57a05a; --note-ink:#2f5d32;
+    --coba:#c0392b; --cuba:#2e8b30;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.6; font-size:17px;}
+  .wrap{max-width:820px; margin:0 auto; padding:32px 20px 80px;}
+  header.top{text-align:center; padding:28px 20px; margin-bottom:28px;
+    background:linear-gradient(135deg,#2f6db0,#3f8ac9); color:#fff; border-radius:16px;}
+  header.top .kicker{font-size:14px; letter-spacing:.14em; text-transform:uppercase; opacity:.9;}
+  header.top h1{margin:8px 0 4px; font-size:28px;}
+  header.top .sub{opacity:.92; font-size:15px;}
+  nav.toc{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 20px; margin-bottom:30px;}
+  nav.toc h2{margin:0 0 8px; font-size:14px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);}
+  nav.toc ol{margin:0; padding-left:20px;}
+  nav.toc a{color:var(--accent); text-decoration:none;}
+  nav.toc a:hover{text-decoration:underline;}
+  section.slide{background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:24px 26px; margin-bottom:22px; box-shadow:0 1px 3px rgba(20,30,45,.04);}
+  .slidenum{display:inline-block; font-size:12px; font-weight:700; letter-spacing:.06em;
+    color:var(--accent); background:var(--accent-soft); padding:3px 10px; border-radius:20px; margin-bottom:10px;}
+  section.slide h2{margin:2px 0 14px; font-size:22px; color:var(--ink); border-bottom:2px solid var(--accent-soft); padding-bottom:8px;}
+  section.slide h3{margin:20px 0 8px; font-size:17px; color:var(--accent);}
+  ul{margin:8px 0; padding-left:22px;} li{margin:5px 0;} p{margin:8px 0;}
+  .arrow{color:var(--accent); font-weight:700;}
+  .note{background:var(--note); border-left:4px solid var(--note-border); border-radius:6px;
+    padding:10px 14px; margin:12px 0; font-size:15.5px; color:var(--note-ink);}
+  .eqbox{background:#fbfcfd; border:1px solid var(--line); border-left:4px solid var(--accent);
+    border-radius:6px; padding:6px 14px; margin:12px 0; overflow-x:auto;}
+  .coba{color:var(--coba); font-weight:700;} .cuba{color:var(--cuba); font-weight:700;}
+  table{border-collapse:collapse; width:100%; margin:12px 0; font-size:15px;}
+  th,td{border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top;}
+  th{background:var(--accent-soft);}
+  .cmp th:nth-child(2){color:var(--coba);} .cmp th:nth-child(3){color:var(--cuba);}
+  code{font-family:"SF Mono",Menlo,Consolas,monospace; background:#eef1f4; padding:1px 5px; border-radius:4px; font-size:14.5px;}
+  footer{text-align:center; color:var(--muted); font-size:13px; margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">Brain Inspired Computing · Lecture 5</div>
+  <h1>Functional models of synaptic transmission</h1>
+  <div class="sub">Prof. Dr. Johannes Schemmel — lesbare Fassung der Vorlesungsnotizen (COBA vs. CUBA LIF)</div>
+</header>
+
+<nav class="toc">
+  <h2>Inhalt</h2>
+  <ol>
+    <li><a href="#s1">Recap: synaptic transmission</a></li>
+    <li><a href="#s2">COBA LIF – conductance-based synapses</a></li>
+    <li><a href="#s3">COBA LIF properties</a></li>
+    <li><a href="#s4">CUBA LIF – current-based synapses</a></li>
+    <li><a href="#s5">A simple synaptic kernel · COBA vs CUBA</a></li>
+    <li><a href="#s6">Rewrite: effective time constant &amp; properties</a></li>
+    <li><a href="#s7">Commonly used kernels: DoE &amp; α-function</a></li>
+    <li><a href="#s8">Exponential synapses &amp; the constant A</a></li>
+    <li><a href="#s9">Examples: NEST normalization</a></li>
+    <li><a href="#s10">Synaptic integration · High-Conductance State</a></li>
+    <li><a href="#s11">Reference: High-Conductance State (Destexhe 2003)</a></li>
+    <li><a href="#s12">CUBA closed-form solution</a></li>
+  </ol>
+</nav>
+
+<section class="slide" id="s1">
+  <span class="slidenum">Folie 1</span>
+  <h2>Recap: synaptic transmission</h2>
+  <p>Wiederholung des Schemas der chemischen Synapse (Quelle: mpg.de/synapse): präsynaptischer Vesikelzyklus (NT-Aufnahme &rarr; Andocken &rarr; Ca²⁺-Aktivierung &rarr; Fusion &rarr; Freisetzung in den synaptischen Spalt &rarr; Wiederaufnahme), postsynaptische Membran mit Na⁺-Einstrom und resultierender Spannungsänderung.</p>
+  <div class="note"><b>Einordnung:</b> Diese Vorlesung übersetzt genau diesen biologischen Ablauf in <b>mathematische Modelle</b>, mit denen man Synapsen simulieren kann — vor allem zwei Varianten: COBA und CUBA.</div>
+</section>
+
+<section class="slide" id="s2">
+  <span class="slidenum">Folie 2</span>
+  <h2>COBA LIF – LIF neuron with conductance-based synapses</h2>
+  <p>Ersatzschaltbild: parallel liegen die Membrankapazität \(C_m\), der Leck-Leitwert \(g_L\) (mit \(E_L\)), sowie die synaptischen Leitwerte \(g_e\) (mit \(E_{exc}\)) und \(g_i\) (mit \(E_{inh}\)), plus ein externer Strom \(I^{ext}\) und der Reset \(E_r\).</p>
+  <h3>Membrangleichung</h3>
+  <div class="eqbox">\[ C_m\,\dot u = g_L(E_L-u) + \underbrace{g_e(t)\,(E_{exc}-u) + g_i(t)\,(E_{inh}-u)}_{I^{syn}} + I^{ext} \]</div>
+  <h3>Spike &amp; Reset</h3>
+  <ul>
+    <li>\(u(t_s)=\vartheta \;\Rightarrow\;\) Spike bei \(t=t_s\) (Schwelle \(\vartheta\) erreicht).</li>
+    <li>\(u(t_s < t < t_s+\tau_{ref}) = E_r\) &rarr; Reset mit Refraktärzeit \(\tau_{ref}\).</li>
+  </ul>
+  <h3>Synaptischer Leitwert</h3>
+  <div class="eqbox">\[ g_{e/i}(t) = \sum_{\text{input neuron } k}\ \sum_{\text{spike } s} w_k\, \varepsilon_{e/i}(t-t_s^{k}) \]</div>
+  <ul>
+    <li>\(w_k\): synaptisches Gewicht, Einheit <b>[S] (Siemens)</b> — also ein <b>Leitwert</b>.</li>
+    <li>\(\varepsilon_{e/i}\): synaptischer Kernel (zeitlicher Verlauf pro Spike).</li>
+  </ul>
+  <div class="note"><b>Erklärung:</b> „Conductance-based“ = das Gewicht ist ein <b>Leitwert</b>. Der synaptische Strom hängt vom aktuellen \(u\) ab (Terme \(E-u\)) — deshalb sind COBA-Synapsen zustandsabhängig. LIF = Leaky Integrate-and-Fire.</div>
+</section>
+
+<section class="slide" id="s3">
+  <span class="slidenum">Folie 3</span>
+  <h2>Some COBA LIF properties</h2>
+  <ul>
+    <li>Der <b>Dynamikbereich von \(u\)</b> ist durch die Reversal-Potentiale begrenzt, insbesondere \(u > E_{inh}\).</li>
+    <li>PSPs beeinflussen sich gegenseitig (Parallelschaltung von Leitwerten). Beispiele:</li>
+  </ul>
+  <p><b>(A)</b> Bei bereits hohem Gesamtleitwert \(g_{tot} := g_L + g_e + g_i\) wird die Wirkung eines zusätzlichen PSP <b>kleiner</b>.</p>
+  <p><b>(B)</b> COBA-Synapsen ändern die <b>Reaktionsgeschwindigkeit</b> der Membran:</p>
+  <div class="eqbox">\[ \tau_{eff}(g_{tot}) \;\le\; \tau_m = \frac{C_m}{g_L} \]</div>
+  <div class="note"><b>Erklärung:</b> Mehr offene Kanäle = höherer \(g_{tot}\) = schnellere Membran (kleineres \(\tau_{eff}\)) und gleichzeitig <b>gedämpfte</b> Einzel-PSPs. Das ist die Grundlage des später besprochenen „High-Conductance State“.</div>
+</section>
+
+<section class="slide" id="s4">
+  <span class="slidenum">Folie 4</span>
+  <h2>CUBA LIF – LIF neuron with current-based synapses</h2>
+  <ul>
+    <li>Die meisten Synapsen sitzen <b>weit weg</b> vom Soma und dessen Potential \(u(t)\).</li>
+    <li>Was von distalen Synapsen am Soma ankommt, ist ein <b>Strompuls</b> (ähnlich wie \(I^{ext}\)).</li>
+  </ul>
+  <h3>CUBA-LIF-Gleichung</h3>
+  <div class="eqbox">\[ C_m\,\dot u = g_L(E_L-u) + I^{ext} + I^{syn}, \qquad I^{syn} = \sum_k\sum_s w_k\,\varepsilon_{e/i}(t-t_s^{k}) \]</div>
+  <p>&rarr; Gewicht \(w_k\) wird in <b>[A] (Ampere)</b> gemessen — also ein <b>Strom</b>.</p>
+  <h3>Some CUBA LIF properties</h3>
+  <ul>
+    <li>Dynamikbereich von \(u\) ist <b>nicht</b> begrenzt.</li>
+    <li>PSPs derselben Synapse sind <b>immer identisch</b>.</li>
+    <li>Reaktionsgeschwindigkeit der Membran ist <b>immer</b> \(\tau_m = C_m/g_L\).</li>
+  </ul>
+  <p><span class="arrow">&rarr;</span> <b>COBA und CUBA LIF sind unterschiedlich!</b></p>
+  <div class="note"><b>Erklärung:</b> „Current-based“ = das Gewicht ist ein <b>Strom</b>, unabhängig von \(u\) (kein \(E-u\)-Term). Dadurch ist CUBA mathematisch einfacher und linear, aber biophysikalisch weniger realistisch für nahe Synapsen.</div>
+</section>
+
+<section class="slide" id="s5">
+  <span class="slidenum">Folie 5</span>
+  <h2>A simple synaptic kernel · COBA vs CUBA</h2>
+  <h3>Exponentielle Synapse</h3>
+  <div class="eqbox">\[ \varepsilon_{e/i}(t) = \Theta(t)\, e^{-t/\tau_{syn}^{e/i}} \]</div>
+  <p>mit synaptischer Zeitkonstante \(\tau_{syn}^{e/i}\). \(\Theta(t)\) ist die Heaviside-Stufe: der Kernel springt bei \(t_s^k\) auf 1 und fällt dann exponentiell ab.</p>
+  <table class="cmp">
+    <thead><tr><th>Aspekt</th><th>COBA</th><th>CUBA</th></tr></thead>
+    <tbody>
+      <tr><td>Synaptischer Strom \(I^{syn}\)</td><td>\(g_e(t)(E_{exc}-u)+g_i(t)(E_{inh}-u)\)</td><td>\(\sum_k\sum_s w_k\,\varepsilon_{e/i}(t-t_s^{k})\)</td></tr>
+      <tr><td>Kernel-Summe</td><td>\(g_{e/i}(t)=\sum_k\sum_s w_k\,\varepsilon_{e/i}\)</td><td>direkt als Strom</td></tr>
+      <tr><td>Gewicht \(w_k\)</td><td>Leitwert <b>[S]</b></td><td>Strom <b>[A]</b></td></tr>
+    </tbody>
+  </table>
+  <div class="note"><b>Merke:</b> Gleicher Kernel \(\varepsilon\), aber bei COBA wird er mit \((E-u)\) multipliziert (spannungsabhängig), bei CUBA nicht.</div>
+</section>
+
+<section class="slide" id="s6">
+  <span class="slidenum">Folie 6</span>
+  <h2>Rewrite: effektive Zeitkonstante &amp; Eigenschaften</h2>
+  <p>Beide Modelle lassen sich in dieselbe Form bringen:</p>
+  <div class="eqbox">\[ \tau_{eff}\,\dot u = u_{eff} - u \]</div>
+  <table class="cmp">
+    <thead><tr><th></th><th>COBA</th><th>CUBA</th></tr></thead>
+    <tbody>
+      <tr><td>\(\tau_{eff}\)</td><td>\(\dfrac{C_m}{g_L+g_e+g_i} =: \dfrac{C_m}{g_{tot}}\)</td><td>\(\dfrac{C_m}{g_L}\;(=\tau_m)\)</td></tr>
+      <tr><td>\(u_{eff}\)</td><td>\(\dfrac{\sum_x g_x E_x + I^{ext}}{g_{tot}},\; x\in\{L,e,i\}\)</td><td>\(E_L + \dfrac{I^{syn}+I^{ext}}{g_L}\)</td></tr>
+      <tr><td>Zeitkonstante</td><td>\(\tau_{eff}\le\tau_m\) (variabel)</td><td>\(\tau_{eff}=\text{const}=\tau_m\)</td></tr>
+      <tr><td>Dynamikbereich</td><td>begrenzt</td><td>unbegrenzt</td></tr>
+      <tr><td>Synapsen-Kopplung</td><td>Nachbarsynapsen beeinflussen sich</td><td>Ströme sind unabhängig</td></tr>
+      <tr><td>PSPs</td><td>hängen vom Kontext ab</td><td>derselben Synapse immer identisch</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><b>Erklärung:</b> \(u_{eff}\) ist das momentane „Ziel-Potential“, \(\tau_{eff}\) die Geschwindigkeit, mit der \(u\) dorthin läuft. Bei COBA ändern beide sich mit der Aktivität; bei CUBA bleibt \(\tau_{eff}\) fest — das ist der Kern des Unterschieds.</div>
+</section>
+
+<section class="slide" id="s7">
+  <span class="slidenum">Folie 7</span>
+  <h2>Commonly used synaptic kernels \(\varepsilon(t-t_s^{k})\)</h2>
+  <ul>
+    <li>Beschreiben den Zeitverlauf von synaptischer Leitfähigkeit oder Strom.</li>
+    <li>Rein <b>phänomenologische</b> Modelle (nicht mechanistisch hergeleitet).</li>
+    <li>Annahme zur Vereinfachung: \(t_s^{k}=0\).</li>
+  </ul>
+  <h3>(1) Difference of exponentials (DoE)</h3>
+  <div class="eqbox">\[ \varepsilon(t) = \Theta(t)\,\frac{A}{\tau_{fall}-\tau_{rise}}\left(-e^{-t/\tau_{rise}} + e^{-t/\tau_{fall}}\right) \]</div>
+  <p>\(\tau_{rise}\) &harr; Ankunft des Neurotransmitters, \(\tau_{fall}\) &harr; Abbau/Entfernung des Neurotransmitters.</p>
+  <h3>(2) α-Funktion (Grenzfall \(\tau_{rise}=\tau_{fall}\))</h3>
+  <p>Mit \(\tau_{syn}:=\tau_{rise}\) und l'Hôpital ergibt sich:</p>
+  <div class="eqbox">\[ \lim_{\tau_{syn}\to\tau_{fall}}\varepsilon(t) = \Theta(t)\,\frac{A\,t}{\tau_{syn}^{2}}\,e^{-t/\tau_{syn}} \]</div>
+  <div class="note"><b>Erklärung:</b> Die DoE hat einen realistischen endlichen Anstieg (rise) und Abfall (fall). Fallen beide Zeitkonstanten zusammen, wird daraus die glatte <b>α-Funktion</b> mit einem einzigen Peak.</div>
+</section>
+
+<section class="slide" id="s8">
+  <span class="slidenum">Folie 8</span>
+  <h2>(3) Exponential synapses &amp; die Konstante A</h2>
+  <p>Für schnelle Ankunft der Neurotransmitter (\(\tau_{rise}\to 0\)) erhält man aus dem DoE-Modell zurück:</p>
+  <div class="eqbox">\[ \varepsilon(t) = \Theta(t)\,\frac{A}{\tau_{syn}}\,e^{-t/\tau_{syn}}, \qquad \tau_{syn}:=\tau_{fall} \]</div>
+  <h3>Bemerkungen zur Konstante \(A\)</h3>
+  <p>\(A\) erfüllt zwei Zwecke:</p>
+  <ul>
+    <li><b>(I)</b> Sie legt die <b>physikalische Einheit</b> von \(\varepsilon(t)\) fest. Hat \(A\) z. B. die Einheit [s], wird der Kernel einheitenlos.</li>
+    <li><b>(II)</b> Sie steuert die <b>Normierung</b> von \(\varepsilon(t)\).</li>
+  </ul>
+  <div class="note"><b>WARNUNG (aus der Folie):</b> Verschiedene Bücher und Simulatoren benutzen <b>unterschiedliche Normierungen</b>! Bei Zahlenwerten immer prüfen, welche Konvention gilt.</div>
+</section>
+
+<section class="slide" id="s9">
+  <span class="slidenum">Folie 9</span>
+  <h2>Examples: NEST-Normierung</h2>
+  <p>Der <b>NEST-Simulator</b> setzt:</p>
+  <ul>
+    <li>\(A = \tau_{syn}\) für <b>exponentielle</b> Kernel</li>
+    <li>\(A = e\cdot\tau_{syn}\) für <b>alpha</b>-Kernel</li>
+  </ul>
+  <p>Dies normiert \(\varepsilon(t)\) so, dass \(\max(\varepsilon(t)) = 1\).</p>
+  <p>Grafik: Der exponentielle Kernel springt bei \(t_s^k\) sofort auf sein Maximum und fällt ab; der alpha-Kernel steigt langsam an, erreicht sein Maximum bei \(t_s^k+\tau_{syn}\) und fällt danach ab.</p>
+  <div class="note"><b>Erklärung:</b> Die Normierung auf Peak = 1 macht Gewichte zwischen exp- und alpha-Kerneln vergleichbar. Nützlich, wenn man in NEST Netzwerke aufbaut und konsistente PSP-Amplituden will.</div>
+</section>
+
+<section class="slide" id="s10">
+  <span class="slidenum">Folie 10</span>
+  <h2>Synaptic integration mit CUBA und COBA</h2>
+  <p>Beide LIF-Neuronen (COBA &amp; CUBA) wirken als <b>Tiefpassfilter</b> ihres Eingangs.</p>
+  <ul>
+    <li><span class="coba">COBA</span>-Synapsen sind <b>biophysikalisch realistischer</b> für lokale/somatische Integration &rarr; nahe Synapsen wirken als Parallelleitwerte.</li>
+    <li><span class="cuba">CUBA</span> kann die genauere Wahl sein, um <b>distalen</b> Input in einem Punkt-Neuron-Modell zu integrieren &rarr; was das Soma erreicht, sind (weitgehend) unabhängige Ströme.</li>
+    <li><span class="coba">COBA</span>-LIF-Neuronen senken ihre effektive Zeitkonstante \(\tau_{eff}<\tau_m\) für \(g_{tot}>g_L\) &rarr; folgen dem Input schnell im <b>„High-Conductance State“ (HCS)</b>.</li>
+  </ul>
+  <div class="note"><b>Erklärung:</b> Skizze auf der Folie: bei kleinem \(g_{tot}\) reagiert \(u\) träge; bei großem \(g_{tot}\) (HCS) folgt \(u\) den einzelnen Inputs viel schneller und schärfer. Das ist ein rein durch COBA erzeugter Effekt.</div>
+</section>
+
+<section class="slide" id="s11">
+  <span class="slidenum">Folie 11</span>
+  <h2>Referenz: The High-Conductance State (Destexhe 2003)</h2>
+  <p>Quelle: <b>Destexhe, A., Rudolph, M. &amp; Paré, D.</b> „The high-conductance state of neocortical neurons <i>in vivo</i>.“ <i>Nat Rev Neurosci</i> <b>4</b>, 739–751 (2003). doi:10.1038/nrn1198</p>
+  <p>Die Abbildung vergleicht intrazelluläre Ableitungen und EEG in verschiedenen Zuständen (Awake, Ketamin-Xylazin, Barbiturat, in vitro): Im wachen Zustand ist das EEG desynchronisiert und das Membranpotential depolarisiert und stark fluktuierend (= High-Conductance State), unter Anästhesie treten Up-/Down-States auf.</p>
+  <div class="note"><b>Einordnung:</b> Beleg aus der Literatur, dass der HCS ein reales physiologisches Phänomen wache Cortex-Neuronen ist — genau der Regime, in dem der COBA-Effekt aus Folie 10 auftritt.</div>
+</section>
+
+<section class="slide" id="s12">
+  <span class="slidenum">Folie 12</span>
+  <h2>CUBA: geschlossene Lösung (closed-form)</h2>
+  <p>CUBA-LIF-Neuronen sind mathematisch einfacher &rarr; es gibt eine geschlossene Lösung für exponentielle Kernel:</p>
+  <div class="eqbox">\[ u(t) = E_L + \frac{I^{ext}}{g_L} + \sum_{\text{syn}}\sum_{\text{spikes}} \Theta(t-t_s^{k})\, \frac{\tau_m\,\tau_{syn}^{k}\,w_k}{C_m(\tau_m-\tau_{syn}^{k})} \left(e^{-\frac{t-t_s^{k}}{\tau_m}} - e^{-\frac{t-t_s^{k}}{\tau_{syn}^{k}}}\right) \]</div>
+  <p>Der Klammerterm ist formal eine <b>Difference of Exponentials (DoE)</b>.</p>
+  <h3>Bemerkungen</h3>
+  <ul>
+    <li><b>Symmetrisch</b> in \(\tau_m \leftrightarrow \tau_{syn}^{k}\).</li>
+    <li>PSPs werden <b>exponentiell</b> für \(\tau_{syn}^{k}\ll\tau_m\) oder \(\tau_m\ll\tau_{syn}^{k}\).</li>
+  </ul>
+  <div class="note"><b>Erklärung:</b> Weil CUBA linear und \(u\)-unabhängig ist, kann man die PSP-Form exakt hinschreiben — man muss keine Differentialgleichung numerisch lösen. Das ist ein Hauptvorteil von CUBA für Theorie und schnelle Simulation.</div>
+</section>
+
+<footer>Brain Inspired Computing · Lecture 5 — lesbare Transkription der handschriftlichen Folien (mit Erklärungen zur Klausurvorbereitung)</footer>
+
+</div>
+</body>
+</html>

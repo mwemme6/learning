@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIC Lecture 8 – Neural codes &amp; rate-based network models</title>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1c2530;--muted:#5b6875;--accent:#2f6db0;--accent-soft:#eaf2fb;--line:#e2e6eb;--note:#f0f7f0;--note-border:#57a05a;--note-ink:#2f5d32;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;font-size:17px;}
+  .wrap{max-width:820px;margin:0 auto;padding:32px 20px 80px;}
+  header.top{text-align:center;padding:28px 20px;margin-bottom:28px;background:linear-gradient(135deg,#2f6db0,#3f8ac9);color:#fff;border-radius:16px;}
+  header.top .kicker{font-size:14px;letter-spacing:.14em;text-transform:uppercase;opacity:.9;}
+  header.top h1{margin:8px 0 4px;font-size:26px;} header.top .sub{opacity:.92;font-size:15px;}
+  nav.toc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:30px;}
+  nav.toc h2{margin:0 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}
+  nav.toc ol{margin:0;padding-left:20px;} nav.toc a{color:var(--accent);text-decoration:none;} nav.toc a:hover{text-decoration:underline;}
+  section.slide{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 26px;margin-bottom:22px;box-shadow:0 1px 3px rgba(20,30,45,.04);}
+  .slidenum{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:20px;margin-bottom:10px;}
+  section.slide h2{margin:2px 0 14px;font-size:22px;color:var(--ink);border-bottom:2px solid var(--accent-soft);padding-bottom:8px;}
+  section.slide h3{margin:20px 0 8px;font-size:17px;color:var(--accent);}
+  ul{margin:8px 0;padding-left:22px;} li{margin:5px 0;} p{margin:8px 0;}
+  .arrow{color:var(--accent);font-weight:700;} .plus{color:#2e8b30;font-weight:700;} .minus{color:#c0392b;font-weight:700;}
+  .note{background:var(--note);border-left:4px solid var(--note-border);border-radius:6px;padding:10px 14px;margin:12px 0;font-size:15.5px;color:var(--note-ink);}
+  .eqbox{background:#fbfcfd;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:6px;padding:6px 14px;margin:12px 0;overflow-x:auto;}
+  .keybox{background:#fff8e8;border:1px solid #e8d48a;border-left:4px solid #d9a520;border-radius:6px;padding:6px 14px;margin:12px 0;overflow-x:auto;}
+  table{border-collapse:collapse;margin:12px 0;font-size:15px;} th,td{border:1px solid var(--line);padding:6px 14px;text-align:center;} th{background:var(--accent-soft);}
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">Brain Inspired Computing · Lecture 8</div>
+  <h1>Neural codes &amp; rate-based network models</h1>
+  <div class="sub">Prof. Dr. Johannes Schemmel — lesbare Fassung der Vorlesungsnotizen</div>
+</header>
+
+<nav class="toc">
+  <h2>Inhalt</h2>
+  <ol>
+    <li><a href="#s1">Common neural codes: Rate code</a></li>
+    <li><a href="#s2">On-/Off-center receptive fields</a></li>
+    <li><a href="#s3">Place code &amp; temporal code</a></li>
+    <li><a href="#s4">Time-to-first-spike &amp; phase code</a></li>
+    <li><a href="#s5">Place cells (Nobelpreis 2014)</a></li>
+    <li><a href="#s6">Barn owl: sound localization</a></li>
+    <li><a href="#s7">Firing-rate &amp; population models</a></li>
+    <li><a href="#s8">Rate-based input integration (Herleitung)</a></li>
+    <li><a href="#s9">Rate-based response &amp; Aktivierungsfunktionen</a></li>
+    <li><a href="#s10">Rate-based neural network models</a></li>
+    <li><a href="#s11">Feed-forward networks · binary logic (NOT)</a></li>
+    <li><a href="#s12">NAND &amp; Turing-Vollständigkeit</a></li>
+  </ol>
+</nav>
+
+<section class="slide" id="s1">
+  <span class="slidenum">Folie 1</span>
+  <h2>Common neural codes in biology: Rate code</h2>
+  <p><b>Rate code:</b> Information steckt in der <b>Feuerrate</b>. Beispiel: V1-Tuning-Kurven — die Feuerrate eines Neurons hängt von der Balkenorientierung ab (Peak bei der bevorzugten Orientierung).</p>
+  <p>Aber: Rate-Codes leiden oft unter einem <b>langen Integrationsfenster</b>, um zuverlässige Schätzungen zu erhalten.</p>
+  <p>Beleg: V1-Physiologie, <b>Orientierungsselektivität</b> (Hubel &amp; Wiesel 1968) — die neuronale Antwort (spikes/s) folgt einer glockenförmigen Kurve über der Stimulus-Orientierung (Peak um 0°).</p>
+  <div class="note"><b>Erklärung:</b> Der Rate-Code ist der einfachste und robusteste Code, aber <b>langsam</b>: Man muss über ein Zeitfenster mitteln, um die Rate genau zu kennen. Das motiviert die schnelleren Codes auf den folgenden Folien.</div>
+</section>
+
+<section class="slide" id="s2">
+  <span class="slidenum">Folie 2</span>
+  <h2>On-/Off-center receptive fields (retinale Ganglienzellen)</h2>
+  <p>Klassisches Center-Surround-Schema: <b>On-center</b>-Zellen feuern maximal bei Licht im <b>Zentrum</b>, <b>Off-center</b>-Zellen bei Licht im <b>Umfeld</b>. Diffuse Beleuchtung (A) erzeugt wenig Antwort, ein kleiner Lichtpunkt im Zentrum (B/C) treibt die On-Zelle stark, Umfeld-Beleuchtung (E) treibt die Off-Zelle.</p>
+  <div class="note"><b>Erklärung:</b> Das antagonistische Center-Surround-Feld lässt sich mathematisch als <b>Difference of Gaussians (DoG)</b> beschreiben. Es implementiert eine Kontrast-/Kantendetektion — die Retina überträgt vor allem <b>Änderungen</b>, nicht die absolute Helligkeit.</div>
+</section>
+
+<section class="slide" id="s3">
+  <span class="slidenum">Folie 3</span>
+  <h2>Place code &amp; temporal code</h2>
+  <h3>Place code</h3>
+  <p>Die <b>Lage/Identität</b> des Neurons kodiert die Information. Beispiel: die <b>retinotope Karte</b> in V1.</p>
+  <h3>Temporal code</h3>
+  <p>Das <b>relative Timing</b> der Spikes kodiert Information. Beispiel: binaurale Schall-Lokalisation der <b>Schleiereule (barn owl)</b>.</p>
+  <ul>
+    <li>Präzision: ca. 1°–2°</li>
+    <li>Zeitliche Auflösung: ca. <b>10 µs</b> &nbsp;<span class="arrow">&harr;</span>&nbsp; Membran-Zeitkonstante: ca. <b>10 ms</b>!</li>
+  </ul>
+  <div class="note"><b>Erklärung:</b> Der auffällige Punkt: Die Eule erreicht eine zeitliche Auflösung von 10 µs, obwohl die Membran-Zeitkonstante 1000× größer ist (10 ms). Ein einzelnes Neuron kann das nicht — es braucht ein cleveres Netzwerk (Koinzidenzdetektion, Folie 6).</div>
+</section>
+
+<section class="slide" id="s4">
+  <span class="slidenum">Folie 4</span>
+  <h2>Time-to-first-spike (latency code) &amp; phase code</h2>
+  <h3>Time-to-first-spike / Latenz-Code</h3>
+  <p>Das <b>Timing des Feuer-Onsets</b> kodiert Information (Beispiel: Salamander-Retina).</p>
+  <p>Einfaches Spielzeug-Netzwerk für Single-Spike-Latenz-Encoding: Ein Eingangsstrom \(I(t)\) treibt ein exzitatorisches Neuron \(e\), das ein inhibitorisches Neuron \(i\) ansteuert. Bei <b>schwachem</b> Input steigt \(u_e\) langsam &rarr; großes \(\Delta t\) bis zum Spike; bei <b>starkem</b> Input steigt \(u_e\) schnell &rarr; kleines \(\Delta t\).</p>
+  <h3>Phase code</h3>
+  <p>Relatives Timing zu einem <b>oszillatorischen Signal</b> (z. B. Theta-Rhythmus). Beispiel: <b>Place cells</b> im Hippocampus — grob ein Place-/Rate-Code, fein ein <b>Phase-Code</b> (Phasen-Präzession).</p>
+  <div class="note"><b>Erklärung:</b> Latenz-Code = „stärkerer Reiz &rarr; früherer Spike“. Das ist viel schneller als ein Rate-Code, weil schon der <b>erste</b> Spike Information trägt. Der Phase-Code nutzt zusätzlich die Position innerhalb einer Hintergrund-Oszillation als Informationsträger.</div>
+</section>
+
+<section class="slide" id="s5">
+  <span class="slidenum">Folie 5</span>
+  <h2>Place cells (Nobelpreis Medizin 2014)</h2>
+  <p>Räumliche Feuermuster von 8 Place-Cells aus der CA1-Schicht einer Ratte. Die Ratte lief auf einer Bahn hin und her; jeder Punkt markiert eine Position, an der ein Aktionspotential auftrat, die Farbe kennzeichnet das jeweilige Neuron. Jede Zelle feuert nur an einem bestimmten <b>Ort</b> (ihrem „place field“).</p>
+  <div class="note"><b>Erklärung:</b> Beispiel für einen <b>Place-Code</b>: Welche Zelle feuert, verrät den Ort des Tieres. Die Entdeckung des „inneren GPS“ (place cells / grid cells) wurde 2014 mit dem Nobelpreis ausgezeichnet (O'Keefe, Moser &amp; Moser).</div>
+</section>
+
+<section class="slide" id="s6">
+  <span class="slidenum">Folie 6</span>
+  <h2>Barn owl: binaurale Schall-Lokalisation</h2>
+  <p>Mechanismus: Der Schall erreicht das linke und rechte Ohr mit einer <b>Laufzeitdifferenz</b> (ITD). Axone von beiden Seiten bilden <b>Delay Lines</b> (Verzögerungsleitungen), die auf eine Reihe von <b>Koinzidenzdetektoren</b> treffen. Genau der Detektor, bei dem sich die verzögerten Signale <b>gleichzeitig</b> treffen, feuert — seine Position kodiert die Schallrichtung.</p>
+  <div class="note"><b>Erklärung:</b> Dies ist das <b>Jeffress-Modell</b>. Es löst das Paradox von Folie 3: Ein einzelnes Neuron ist zu träge (10 ms), aber ein Netzwerk aus Delay Lines + Koinzidenzdetektoren erreicht µs-Genauigkeit. Timing (temporal code) wird hier in einen Ort (place code) übersetzt.</div>
+</section>
+
+<section class="slide" id="s7">
+  <span class="slidenum">Folie 7</span>
+  <h2>Firing-rate-based and population models</h2>
+  <p>Spikende Neuronen zu modellieren ist <b>rechenaufwändig</b> und <b>analytisch schwierig</b>.</p>
+  <p><b>Idee:</b> Ersetze Neuronen (oder kleine Populationen) durch <b>„firing-rate units“</b>:</p>
+  <ul>
+    <li><span class="plus">＋</span> gewinnt analytische Handhabbarkeit</li>
+    <li><span class="minus">－</span> verliert spike-timing-basierte Codes!</li>
+  </ul>
+  <h3>Rate-based input integration</h3>
+  <p>Netzwerk-Motiv: Ein postsynaptisches Neuron mit Ausgangsrate \(z(t)\) erhält Eingangsraten \(x_i(t)\) über Gewichte \(w_i\):</p>
+  <ul>
+    <li>\(w_i>0\): Erregung (excitation)</li>
+    <li>\(w_i<0\): Hemmung (inhibition)</li>
+  </ul>
+  <div class="note"><b>Erklärung:</b> Der große Übergang dieser Vorlesung: weg von einzelnen Spikes, hin zu <b>kontinuierlichen Feuerraten</b>. Das ist die Brücke zu künstlichen neuronalen Netzen — Rate-Units sind im Kern die „Neuronen“ des Deep Learning.</div>
+</section>
+
+<section class="slide" id="s8">
+  <span class="slidenum">Folie 8</span>
+  <h2>Rate-based input integration – Herleitung</h2>
+  <p>Eingangsstrom \(I(t)\) zum postsynaptischen Neuron mit exponentiellem CUBA-Kernel. Man ersetzt den Spike-Train durch seinen Erwartungswert (die Rate \(x_i(\tau)\)):</p>
+  <div class="eqbox">\[ I(t) = \sum_i w_i\sum_s \varepsilon(t-t_s^{i}) = \sum_i w_i\int_{-\infty}^{t}\!\varepsilon(t-\tau)\,\rho_i(\tau)\,d\tau \;\longrightarrow\; \sum_i w_i\int_{-\infty}^{t}\!\varepsilon(t-\tau)\,x_i(\tau)\,d\tau \]</div>
+  <div class="eqbox">\[ = \sum_i w_i\int_{-\infty}^{t}\underbrace{\Theta(t-\tau)}_{=1}\,e^{-\frac{t-\tau}{\tau_{syn}}}\,x_i(\tau)\,d\tau = \sum_i w_i\,e^{-t/\tau_{syn}}\int_{-\infty}^{t} e^{\tau/\tau_{syn}}\,x_i(\tau)\,d\tau \]</div>
+  <p>Ableiten nach \(t\) liefert eine Differentialgleichung:</p>
+  <div class="keybox">\[ \tau_{syn}\,\dot I = -I + \tau_{syn}\,\vec w\cdot\vec x \]</div>
+  <p>Steady state (\(\dot I=0\)): \(\quad I = \tau_{syn}\,\vec w\cdot\vec x\).</p>
+  <div class="note"><b>Erklärung:</b> Aus der Faltung mit dem exponentiellen Kernel wird eine einfache lineare DGL: Der synaptische Strom \(I\) folgt der gewichteten Eingangssumme \(\vec w\cdot\vec x\) wie ein <b>Tiefpassfilter</b> mit Zeitkonstante \(\tau_{syn}\).</div>
+</section>
+
+<section class="slide" id="s9">
+  <span class="slidenum">Folie 9</span>
+  <h2>Rate-based response &amp; Aktivierungsfunktionen</h2>
+  <ul>
+    <li>Bei konstantem Input \(I\) läuft die Ausgangsrate gegen \(\displaystyle\lim_{t\to\infty} z(t) = F(\vec w\cdot\vec x)\); dabei ist \(\tau_{syn}\) in die <b>Response-Funktion</b> \(F\) absorbiert.</li>
+    <li>Bei zeitvariablem Input folgt der Output mit etwas Verzögerung (Membran-Zeitkonstante, Populationsdynamik):</li>
+  </ul>
+  <div class="keybox">\[ \tau\,\dot z = -z + F(\vec w\cdot\vec x) \]</div>
+  <p>\(\tau\) berücksichtigt die Tiefpassfilterung von Strom und Antwort. Gängige Response-/Aktivierungsfunktionen \(F(I)\):</p>
+  <ul>
+    <li><b>Softplus:</b> \(\log(1+e^{I})\)</li>
+    <li><b>Sigmoid:</b> \(z_{max}\,\dfrac{1}{1+e^{-I}}\)</li>
+    <li><b>Lineare Gleichrichtung (ReLU):</b> \([I]_+ = \max(0,I)\)</li>
+    <li><b>Exponentiell:</b> \(e^{I}\)</li>
+  </ul>
+  <div class="note"><b>Erklärung:</b> \(F(I)\) ist die <b>f-I-Kurve</b> (Rate als Funktion des Inputs). Genau diese Funktionen sind die Aktivierungsfunktionen künstlicher neuronaler Netze — Sigmoid und ReLU kennt man aus dem Deep Learning.</div>
+</section>
+
+<section class="slide" id="s10">
+  <span class="slidenum">Folie 10</span>
+  <h2>Rate-based neural network models</h2>
+  <p>Zwei Neuronenschichten mit rekurrenten und Feed-Forward-Verbindungen:</p>
+  <ul>
+    <li><b>Rekurrentes Gewicht</b> \(w_{kj}\) (Konvention \(w_{\text{post},\text{pre}}\))</li>
+    <li><b>Netzwerk-Population</b> \(z_k(t)\)</li>
+    <li><b>Effektiver Input</b> \(V_k = \sum_i v_{ki}\,x_i\)</li>
+    <li><b>Forward-Gewicht</b> \(v_{ki}\), <b>Input</b> \(x_i(t)\)</li>
+  </ul>
+  <h3>Populationsdynamik</h3>
+  <div class="keybox">\[ \tau\,\dot z_k = -z_k + F\!\left(\sum_{j=1}^{K} w_{kj}\,z_j + \sum_{i=1}^{N} v_{ki}\,x_i + b_k\right) \]</div>
+  <p>\(F\) = Gain-Funktion, \(b_k\) = Bias bzw. intrinsische Erregbarkeit. Man startet einfach und erhöht dann die Komplexität.</p>
+  <div class="note"><b>Erklärung:</b> Das ist die allgemeine Gleichung eines <b>rekurrenten neuronalen Netzes</b>: Feed-Forward-Input \((v_{ki}x_i)\) plus Rückkopplung \((w_{kj}z_j)\) plus Bias, durch die Nichtlinearität \(F\) geschickt. Setzt man \(w_{kj}=0\), erhält man ein reines Feed-Forward-Netz (nächste Folie).</div>
+</section>
+
+<section class="slide" id="s11">
+  <span class="slidenum">Folie 11</span>
+  <h2>Feed-forward networks · stationary binary logic</h2>
+  <p>Feed-Forward = <b>keine</b> rekurrenten Verbindungen (\(w_{ij}=0\)).</p>
+  <p><b>Warmup: stationäre binäre Logik.</b> Seien \(x_i\in\{L(\text{ow}),H(\text{igh})\}\) mit \(0\le L<H\). Mit ReLU-Response \(F(V_k+b_k)=[V_k+b_k]_+=\max(0,V_k+b_k)\) läuft jeder Knoten (für konstanten Input, \(t\to\infty\)) auf \(z_k=F(V_k+b_k)\).</p>
+  <h3>Beispiel 1: NOT(x)</h3>
+  <p>Ein Neuron mit Gewicht \(-1\) und Bias \(H+L\):</p>
+  <div class="eqbox">\[ z = [-1\cdot x + H + L]_+ = \begin{cases} H & \text{falls } x=L\\ L & \text{falls } x=H \end{cases} \]</div>
+  <div class="note"><b>Erklärung:</b> Mit nur einem Gewicht und einem passenden Bias realisiert ein Rate-Neuron die logische <b>NOT</b>-Funktion: aus Low wird High und umgekehrt. Das zeigt, dass solche Netze diskrete Logik ausführen können.</div>
+</section>
+
+<section class="slide" id="s12">
+  <span class="slidenum">Folie 12</span>
+  <h2>Beispiel 2: NAND &amp; Turing-Vollständigkeit</h2>
+  <p>Ein zweistufiges Netz realisiert <b>NAND(\(x_1,x_2\))</b>: \(x_1,x_2\) mit Gewicht \(+1\) auf \(z_1\) (Bias \(-(H+L)\)), dann \(z_1\) mit Gewicht \(-1\) auf \(z_2\) (Bias \(H\)).</p>
+  <table>
+    <tr><th>\(x_1\backslash x_2\)</th><th>L</th><th>H</th></tr>
+    <tr><th>L</th><td>H</td><td>H</td></tr>
+    <tr><th>H</th><td>H</td><td>L</td></tr>
+  </table>
+  <ul>
+    <li>NAND ist eine <b>nichtlineare</b> Funktion — man nutzt die Nichtlinearität von \([\,\cdot\,]_+\) an \(z_1\): für NAND(H,H) ist \(2H-(H+L)=H-L>0\), für die anderen Fälle wird abgeschnitten.</li>
+    <li>Alle binären logischen Ausdrücke lassen sich durch NAND darstellen (<b>funktionale Vollständigkeit</b>), z. B. \(\text{NOT}(x)=\text{NAND}(x,x)\).</li>
+    <li>Zudem: Addition, Multiplikation realisierbar.</li>
+  </ul>
+  <div class="keybox">&rarr; Rate-based neural networks können (im Prinzip) <b>jede CPU-Instruktion emulieren</b> &rarr; <b>Turing-vollständig</b>.</div>
+  <div class="note"><b>Erklärung:</b> Der krönende Abschluss: Weil NAND funktional vollständig ist und ein kleines Rate-Netz NAND berechnet, kann ein hinreichend großes Rate-basiertes Netz <b>beliebige Berechnungen</b> ausführen. Neuronale Netze sind also universelle Rechenmaschinen.</div>
+</section>
+
+<footer>Brain Inspired Computing · Lecture 8 — lesbare Transkription der handschriftlichen Folien (mit Erklärungen zur Klausurvorbereitung)</footer>
+
+</div>
+</body>
+</html>
