@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Freitextfragen L4–L10 · Brain-Inspired Computing</title>
+<style>
+  :root{
+    --bg:#eef1ec;
+    --surface:#ffffff;
+    --surface-2:#f4f6f1;
+    --ink:#1b241f;
+    --muted:#5c6b63;
+    --accent:#1f7a72;
+    --accent-ink:#0f4a45;
+    --accent-soft:#dcece7;
+    --line:#d9e0d7;
+    --secondary:#a8631f;
+    --secondary-soft:#f1e2cd;
+    --shadow: 0 1px 2px rgba(20,30,25,.05), 0 8px 24px -16px rgba(20,30,25,.25);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0f1614;
+      --surface:#161f1c;
+      --surface-2:#1a2420;
+      --ink:#e7ece8;
+      --muted:#93a39a;
+      --accent:#4fd3c0;
+      --accent-ink:#bdf3e8;
+      --accent-soft:#173430;
+      --line:#26332c;
+      --secondary:#e0a458;
+      --secondary-soft:#332619;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 30px -18px rgba(0,0,0,.6);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0f1614; --surface:#161f1c; --surface-2:#1a2420; --ink:#e7ece8; --muted:#93a39a;
+    --accent:#4fd3c0; --accent-ink:#bdf3e8; --accent-soft:#173430; --line:#26332c;
+    --secondary:#e0a458; --secondary-soft:#332619;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 30px -18px rgba(0,0,0,.6);
+  }
+  :root[data-theme="light"]{
+    --bg:#eef1ec; --surface:#ffffff; --surface-2:#f4f6f1; --ink:#1b241f; --muted:#5c6b63;
+    --accent:#1f7a72; --accent-ink:#0f4a45; --accent-soft:#dcece7; --line:#d9e0d7;
+    --secondary:#a8631f; --secondary-soft:#f1e2cd;
+    --shadow: 0 1px 2px rgba(20,30,25,.05), 0 8px 24px -16px rgba(20,30,25,.25);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:Optima,Candara,"Noto Sans","Segoe UI",Calibri,sans-serif;
+    font-size:16.5px; line-height:1.62;
+  }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+
+  h1,h2,h3{
+    font-family:Georgia,"Iowan Old Style","Palatino Linotype","Book Antiqua",serif;
+    font-weight:600; text-wrap:balance; color:var(--ink); letter-spacing:-.01em;
+  }
+
+  .layout{
+    display:grid;
+    grid-template-columns: 248px minmax(0,1fr);
+    gap:0;
+    max-width:1180px; margin:0 auto;
+    min-height:100vh;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .nav{
+    position:sticky; top:0; align-self:start; height:100vh;
+    overflow-y:auto; padding:28px 18px 40px;
+    border-right:1px solid var(--line);
+    display:flex; flex-direction:column; gap:18px;
+  }
+  .nav .brand{
+    font-family:Georgia,"Iowan Old Style",serif; font-size:15px; font-weight:600;
+    line-height:1.3; color:var(--ink);
+  }
+  .nav .brand small{
+    display:block; margin-top:4px; font-family:Optima,Candara,sans-serif;
+    font-weight:400; font-size:12.5px; color:var(--muted);
+  }
+  .navlist{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px; }
+  .navlink{
+    display:flex; align-items:baseline; justify-content:space-between; gap:8px;
+    padding:8px 10px; border-radius:8px; text-decoration:none;
+    color:var(--ink); font-size:14px;
+  }
+  .navlink:hover{ background:var(--surface-2); }
+  .navlink .lnum{
+    font-family:"SF Mono","Cascadia Code",Consolas,monospace; font-size:11.5px;
+    color:var(--accent); margin-right:8px; font-weight:600;
+  }
+  .navlink .count{
+    font-family:"SF Mono","Cascadia Code",Consolas,monospace; font-size:11px;
+    color:var(--muted); font-variant-numeric:tabular-nums; white-space:nowrap;
+  }
+  .nav .reset{
+    margin-top:auto; border:1px solid var(--line); background:var(--surface);
+    color:var(--muted); font-size:12.5px; padding:8px 10px; border-radius:8px;
+    cursor:pointer; font-family:Optima,Candara,sans-serif;
+  }
+  .nav .reset:hover{ color:var(--ink); border-color:var(--muted); }
+  .nav .reset:focus-visible, .navlink:focus-visible, .q:focus-within{
+    outline:2px solid var(--accent); outline-offset:2px;
+  }
+
+  /* ---------- Main ---------- */
+  .content{ padding:44px 48px 120px; min-width:0; }
+  header.top{
+    max-width:640px; margin-bottom:44px;
+  }
+  header.top .eyebrow{
+    font-family:"SF Mono","Cascadia Code",Consolas,monospace; font-size:12px;
+    letter-spacing:.08em; text-transform:uppercase; color:var(--accent); font-weight:600;
+  }
+  header.top h1{ font-size:32px; margin:10px 0 12px; }
+  header.top p{ color:var(--muted); font-size:15.5px; max-width:60ch; }
+  header.top .howto{
+    margin-top:20px; background:var(--surface); border:1px solid var(--line);
+    border-radius:12px; padding:14px 18px; font-size:14.5px; color:var(--ink);
+    box-shadow:var(--shadow);
+  }
+  header.top .howto b{ color:var(--accent-ink); }
+
+  section.lecture{
+    max-width:700px; margin:0 0 54px; scroll-margin-top:24px;
+  }
+  section.lecture .lhead{
+    display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    border-bottom:1px solid var(--line); padding-bottom:10px; margin-bottom:6px;
+  }
+  section.lecture .lnum{
+    font-family:"SF Mono","Cascadia Code",Consolas,monospace;
+    font-size:13px; color:var(--accent); font-weight:700; letter-spacing:.02em;
+  }
+  section.lecture h2{ font-size:22px; margin:0; flex:1 1 auto; }
+  .progress-badge{
+    font-family:"SF Mono","Cascadia Code",Consolas,monospace; font-size:12px;
+    color:var(--muted); font-variant-numeric:tabular-nums;
+    background:var(--surface-2); border:1px solid var(--line);
+    padding:2px 9px; border-radius:20px;
+  }
+  .focus{
+    font-size:14px; color:var(--muted); margin:10px 0 20px; font-style:italic;
+    border-left:3px solid var(--secondary); padding-left:12px;
+  }
+  .focus b{ color:var(--secondary); font-style:normal; }
+
+  ol.qlist{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:2px; }
+  ol.qlist li{ border-radius:10px; }
+  .q{
+    display:grid; grid-template-columns:auto auto 1fr; align-items:start;
+    gap:0 10px; padding:11px 12px; border-radius:10px; cursor:pointer;
+  }
+  .q:hover{ background:var(--surface-2); }
+  .q input[type="checkbox"]{
+    appearance:none; -webkit-appearance:none; width:17px; height:17px; margin-top:3px;
+    border:1.5px solid var(--muted); border-radius:5px; background:var(--surface);
+    display:inline-block; position:relative; flex:none; cursor:pointer;
+  }
+  .q input[type="checkbox"]:checked{ background:var(--accent); border-color:var(--accent); }
+  .q input[type="checkbox"]:checked::after{
+    content:""; position:absolute; left:4.5px; top:1px; width:4px; height:8px;
+    border:solid var(--surface); border-width:0 2px 2px 0; transform:rotate(40deg);
+  }
+  .qnum{
+    font-family:"SF Mono","Cascadia Code",Consolas,monospace; font-size:11.5px;
+    color:var(--muted); margin-top:2px; white-space:nowrap;
+  }
+  .qtext{ font-size:15.5px; color:var(--ink); }
+  .tag{
+    display:inline-block; font-family:"SF Mono","Cascadia Code",Consolas,monospace;
+    font-size:10.5px; letter-spacing:.02em; color:var(--accent-ink);
+    background:var(--accent-soft); padding:1px 7px; border-radius:20px;
+    margin-right:8px; vertical-align:1px;
+  }
+  .q:has(input:checked) .qtext{ color:var(--muted); text-decoration:line-through; text-decoration-thickness:1px; }
+  .q:has(input:checked) .tag{ opacity:.55; }
+
+  footer.end{
+    max-width:700px; color:var(--muted); font-size:13px; border-top:1px solid var(--line);
+    padding-top:18px; margin-top:10px;
+  }
+
+  @media (max-width: 880px){
+    .layout{ grid-template-columns:1fr; }
+    .nav{
+      position:sticky; top:0; height:auto; z-index:5; flex-direction:row; align-items:center;
+      overflow-x:auto; overflow-y:hidden; padding:12px 14px; gap:14px;
+      background:var(--bg); border-right:none; border-bottom:1px solid var(--line);
+    }
+    .nav .brand{ display:none; }
+    .navlist{ flex-direction:row; gap:4px; }
+    .navlink{ white-space:nowrap; }
+    .nav .reset{ margin-top:0; flex:none; }
+    .content{ padding:28px 20px 100px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){ html{ scroll-behavior:auto; } }
+</style>
+</head>
+<body>
+
+<div class="layout">
+  <nav class="nav" aria-label="Vorlesungen">
+    <div class="brand">Freitextfragen<small>Brain-Inspired&nbsp;Computing · L4–L10</small></div>
+    <ul class="navlist">
+      <li><a class="navlink" href="#l4"><span><span class="lnum">L4</span>Synapsen</span><span class="count">0/9</span></a></li>
+      <li><a class="navlink" href="#l5"><span><span class="lnum">L5</span>COBA / CUBA</span><span class="count">0/7</span></a></li>
+      <li><a class="navlink" href="#l6"><span><span class="lnum">L6</span>Spike-Statistik</span><span class="count">0/7</span></a></li>
+      <li><a class="navlink" href="#l7"><span><span class="lnum">L7</span>Korrelation & STA</span><span class="count">0/7</span></a></li>
+      <li><a class="navlink" href="#l8"><span><span class="lnum">L8</span>Codes & Netze</span><span class="count">0/8</span></a></li>
+      <li><a class="navlink" href="#l9"><span><span class="lnum">L9</span>Tuning & WTA</span><span class="count">0/6</span></a></li>
+      <li><a class="navlink" href="#l10"><span><span class="lnum">L10</span>Plastizität</span><span class="count">0/13</span></a></li>
+    </ul>
+    <button class="reset" id="resetBtn" type="button">Fortschritt zurücksetzen</button>
+  </nav>
+
+  <main class="content">
+    <header class="top">
+      <div class="eyebrow">Mündliche Prüfung · Vertiefung</div>
+      <h1>Freitextfragen zu L4–L10</h1>
+      <p>Verständnisfragen, ausschließlich aus den ausführlichen Vorlesungsmitschriften
+      (<code>html_lec/bic_l4…l10_lesbar.html</code>) destilliert — bewusst ohne
+      Herleitungen oder Rechenaufgaben. Wo eine Gleichung wirklich zentral ist
+      (Membrangleichung, Leaky Integrator), wird nach ihrer <em>Bedeutung</em> gefragt,
+      nicht nach ihrer Berechnung.</p>
+      <div class="howto">
+        <b>Verwendung:</b> Keine Lösungen enthalten — beantworte laut, als säßest du
+        in der Prüfung. Häkchen setzen merkt sich nur lokal in diesem Browser, welche
+        Fragen du schon durchgesprochen hast.
+      </div>
+    </header>
+
+    <section class="lecture" id="l4" data-lecture>
+      <div class="lhead">
+        <span class="lnum">L4</span>
+        <h2>Synapsen &amp; synaptische Übertragung</h2>
+        <span class="progress-badge">0 / 9</span>
+      </div>
+      <p class="focus"><b>Fokus:</b> der komplette Signalweg als Kette, und warum jede
+      Stufe genau so und nicht anders funktioniert — keine Kanalkinetik im Detail.</p>
+      <ol class="qlist">
+        <li><label class="q"><input type="checkbox" data-id="l4-1"><span class="qnum">L4.1</span><span class="qtext"><span class="tag">Ablauf</span>Beschreibe den vollständigen Signalweg von der AP-Initiation am Axonhügel bis zur Spannungsänderung in der postsynaptischen Zelle — nenne jede Station und was dort physikalisch passiert.</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l4-2"><span class="qnum">L4.2</span><span class="qtext"><span class="tag">Stochastik</span>An zwei Stellen der synaptischen Übertragung ist der Ablauf ausdrücklich stochastisch. Welche zwei Stellen sind das, und warum macht gerade das die Übertragung „unzuverlässig“?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l4-3"><span class="qnum">L4.3</span><span class="qtext"><span class="tag">Integration</span>Ein einzelnes PSP hebt die Zielspannung nur um ~1 mV. Was folgt daraus dafür, wie ein Neuron Information aus Tausenden von Synapsen verarbeitet?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l4-4"><span class="qnum">L4.4</span><span class="qtext"><span class="tag">Myelin</span>Erkläre saltatorische Erregungsleitung: Warum „springt“ das AP, und wodurch wird sie schneller und energieeffizienter als kontinuierliche Leitung?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l4-5"><span class="qnum">L4.5</span><span class="qtext"><span class="tag">Richtung</span>Warum kann ein Aktionspotential entlang des Axons nur in eine Richtung laufen?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l4-6"><span class="qnum">L4.6</span><span class="qtext"><span class="tag">Dale</span>Was besagt Dale's Prinzip, und wieso erlaubt es, ein Neuron eindeutig als „exzitatorisch“ oder „inhibitorisch“ zu klassifizieren?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l4-7"><span class="qnum">L4.7</span><span class="qtext"><span class="tag">EPSP/IPSP</span>Wodurch entscheidet sich, ob eine Synapse erregend oder hemmend wirkt — ist das eine Eigenschaft des Transmitters selbst? Begründe.</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l4-8"><span class="qnum">L4.8</span><span class="qtext"><span class="tag">AMPA/NMDA</span>Vergleiche AMPA- und NMDA-Rezeptor: Warum reagieren beide auf Glutamat, aber mit völlig unterschiedlicher Funktion? Was genau macht NMDA zum Koinzidenzdetektor?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l4-9"><span class="qnum">L4.9</span><span class="qtext"><span class="tag">Gap Junctions</span>Vergleiche chemische und elektrische Synapsen entlang Geschwindigkeit, Richtung und Plastizität — wofür sind Gap Junctions besonders geeignet?</span></label></li>
+      </ol>
+    </section>
+
+    <section class="lecture" id="l5" data-lecture>
+      <div class="lhead">
+        <span class="lnum">L5</span>
+        <h2>COBA / CUBA &amp; High-Conductance-State</h2>
+        <span class="progress-badge">0 / 7</span>
+      </div>
+      <p class="focus"><b>Fokus:</b> die eine begriffliche Weiche — spannungsabhängig
+      oder nicht — und was funktional daraus folgt. Die Membrangleichung selbst darfst
+      du dir bildlich vorstellen, nicht auswendig herleiten.</p>
+      <ol class="qlist">
+        <li><label class="q"><input type="checkbox" data-id="l5-1"><span class="qnum">L5.1</span><span class="qtext"><span class="tag">Grundidee</span>Erkläre in eigenen Worten, warum bei COBA der Effekt eines eintreffenden Spikes vom aktuellen Membranpotential abhängt, bei CUBA aber nicht.</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l5-2"><span class="qnum">L5.2</span><span class="qtext"><span class="tag">Realismus</span>Warum ist COBA die biophysikalisch realistischere Wahl für Synapsen nahe am Soma, während CUBA für distale Synapsen eine akzeptable Näherung sein kann?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l5-3"><span class="qnum">L5.3</span><span class="qtext"><span class="tag">τ_eff</span>Was passiert mit der effektiven Membranzeitkonstante, wenn viele COBA-Synapsen gleichzeitig aktiv sind — und warum bleibt sie bei CUBA immer konstant?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l5-4"><span class="qnum">L5.4</span><span class="qtext"><span class="tag">Kernel</span>Beschreibe anschaulich den Unterschied zwischen dem Difference-of-Exponentials-Kernel und der Alpha-Funktion. Wie entsteht die Alpha-Funktion als Grenzfall?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l5-5"><span class="qnum">L5.5</span><span class="qtext"><span class="tag">HCS</span>Warum wird ein Neuron im High-Conductance-State vom „trägen Integrator“ zum „schnellen Koinzidenzdetektor“? Welche Rolle spielt dabei τ<sub>eff</sub>?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l5-6"><span class="qnum">L5.6</span><span class="qtext"><span class="tag">Simulation</span>Welche Gefahr birgt es, in einer Simulation fälschlich CUBA statt COBA zu verwenden?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l5-7"><span class="qnum">L5.7</span><span class="qtext"><span class="tag">Warum so einfach</span>Warum besitzt CUBA eine geschlossene analytische Lösung, COBA im Allgemeinen aber nicht?</span></label></li>
+      </ol>
+    </section>
+
+    <section class="lecture" id="l6" data-lecture>
+      <div class="lhead">
+        <span class="lnum">L6</span>
+        <h2>Statistische Beschreibung von Spike-Trains</h2>
+        <span class="progress-badge">0 / 7</span>
+      </div>
+      <p class="focus"><b>Fokus:</b> warum man überhaupt statistisch denkt, und was
+      Kennzahlen wie Fano-Faktor und C<sub>V</sub> über den Prozess dahinter aussagen —
+      nicht die Herleitung der Poisson-Formel selbst.</p>
+      <ol class="qlist">
+        <li><label class="q"><input type="checkbox" data-id="l6-1"><span class="qnum">L6.1</span><span class="qtext"><span class="tag">Motivation</span>Warum beschreibt man Spike-Trains statistisch, statt jeden einzelnen Spike deterministisch vorherzusagen?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l6-2"><span class="qnum">L6.2</span><span class="qtext"><span class="tag">Poisson</span>Was bedeutet „gedächtnislos“ beim Poisson-Prozess, und warum passt eine exponentielle ISI-Verteilung genau dazu?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l6-3"><span class="qnum">L6.3</span><span class="qtext"><span class="tag">Fano</span>Was sagt ein Fano-Faktor von ≈1, &lt;1 bzw. &gt;1 jeweils über den zugrundeliegenden Feuerprozess aus?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l6-4"><span class="qnum">L6.4</span><span class="qtext"><span class="tag">CV/Refraktärzeit</span>Wie verändert eine Refraktärzeit die ISI-Verteilung und den C<sub>V</sub> eines Spike-Trains, und warum genau so?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l6-5"><span class="qnum">L6.5</span><span class="qtext"><span class="tag">Perspektive</span>Was unterscheidet die „Bottom-up“- von der „Top-down“-Perspektive auf ein neuronales System konzeptionell?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l6-6"><span class="qnum">L6.6</span><span class="qtext"><span class="tag">PSTH</span>Was zeigt ein PSTH, und warum braucht man dafür viele Trials statt eines einzelnen?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l6-7"><span class="qnum">L6.7</span><span class="qtext"><span class="tag">Trade-off</span>Warum ist die Wahl der Fensterbreite Δt beim PSTH ein Kompromiss — was passiert bei zu kleinem bzw. zu großem Δt?</span></label></li>
+      </ol>
+    </section>
+
+    <section class="lecture" id="l7" data-lecture>
+      <div class="lhead">
+        <span class="lnum">L7</span>
+        <h2>Korrelationen, Renewal-Prozess &amp; Spike-Triggered Average</h2>
+        <span class="progress-badge">0 / 7</span>
+      </div>
+      <p class="focus"><b>Fokus:</b> was Korrelation und STA <em>anschaulich</em> messen
+      und wofür man sie einsetzt (Encoding/Decoding) — die Fourier-Rechnung dahinter
+      ist für die mündliche Prüfung nicht der Punkt.</p>
+      <ol class="qlist">
+        <li><label class="q"><input type="checkbox" data-id="l7-1"><span class="qnum">L7.1</span><span class="qtext"><span class="tag">CCF/ACF</span>Was misst die Kreuzkorrelationsfunktion zwischen zwei Signalen anschaulich, und was ist der Spezialfall Autokorrelation?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l7-2"><span class="qnum">L7.2</span><span class="qtext"><span class="tag">Renewal</span>Warum ist ein Renewal-Prozess eine Verallgemeinerung des Poisson-Prozesses, und warum ist der Output eines LIF-Neurons ein Beispiel dafür?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l7-3"><span class="qnum">L7.3</span><span class="qtext"><span class="tag">Encoding/Decoding</span>Erkläre den Unterschied zwischen Encoding und Decoding an einem eigenen Beispiel.</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l7-4"><span class="qnum">L7.4</span><span class="qtext"><span class="tag">STA-Idee</span>Was ist die Grundidee des Spike-Triggered Average, und was verrät sie über die Funktion eines sensorischen Neurons?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l7-5"><span class="qnum">L7.5</span><span class="qtext"><span class="tag">White Noise</span>Warum verwendet man für STA-Messungen bevorzugt einen White-Noise-Stimulus statt eines natürlichen Reizes?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l7-6"><span class="qnum">L7.6</span><span class="qtext"><span class="tag">Grenzen</span>Was ist die zentrale Grenze der STA als lineares Maß? Für welche Art von Neuronen versagt sie?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l7-7"><span class="qnum">L7.7</span><span class="qtext"><span class="tag">Kodierung</span>Was bedeutet ein „flaches“ Leistungsspektrum der Antwort für die Effizienz der neuronalen Kodierung?</span></label></li>
+      </ol>
+    </section>
+
+    <section class="lecture" id="l8" data-lecture>
+      <div class="lhead">
+        <span class="lnum">L8</span>
+        <h2>Neuronale Codes &amp; ratenbasierte Netzwerke</h2>
+        <span class="progress-badge">0 / 8</span>
+      </div>
+      <p class="focus"><b>Fokus:</b> die verschiedenen Codes an ihren biologischen
+      Beispielen erkennen und begründen können, plus die Grundidee des
+      Turing-Vollständigkeits-Arguments — nicht die NAND-Wahrheitstabelle auswendig.</p>
+      <ol class="qlist">
+        <li><label class="q"><input type="checkbox" data-id="l8-1"><span class="qnum">L8.1</span><span class="qtext"><span class="tag">Codes-Überblick</span>Nenne mindestens vier verschiedene neuronale Codes aus der Vorlesung und beschreibe in je einem Satz, worin die Information codiert ist.</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l8-2"><span class="qnum">L8.2</span><span class="qtext"><span class="tag">Rate vs. Latenz</span>Warum ist ein reiner Rate-Code prinzipiell langsam, und was ist der entscheidende Zeitvorteil eines Latenz-Codes (time-to-first-spike)?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l8-3"><span class="qnum">L8.3</span><span class="qtext"><span class="tag">Jeffress-Modell</span>Erkläre am Beispiel der Schleiereule, wie ein Netzwerk aus Delay Lines und Koinzidenzdetektoren eine zeitliche Auflösung erreicht, die weit unter der Membranzeitkonstante des einzelnen Neurons liegt.</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l8-4"><span class="qnum">L8.4</span><span class="qtext"><span class="tag">Place/Phase</span>Was unterscheidet einen Place-Code von einem Phase-Code? Nenne für jeden ein biologisches Beispiel aus der Vorlesung.</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l8-5"><span class="qnum">L8.5</span><span class="qtext"><span class="tag">Rate-Units</span>Was gewinnt man, was verliert man, wenn man von spikenden Neuronen zu ratenbasierten „firing-rate units“ übergeht?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l8-6"><span class="qnum">L8.6</span><span class="qtext"><span class="tag">Aktivierungsfunktion</span>Was ist eine Aktivierungsfunktion F(I) in diesem Kontext, und wie verbindet sie sich mit Aktivierungsfunktionen im Deep Learning?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l8-7"><span class="qnum">L8.7</span><span class="qtext"><span class="tag">Turing</span>Wie zeigt man, dass ratenbasierte neuronale Netze Turing-vollständig sind? Welche Rolle spielt NAND dabei?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l8-8"><span class="qnum">L8.8</span><span class="qtext"><span class="tag">Funktionale Vollständigkeit</span>Warum genügt ein einziges Bauelement wie NAND, um im Prinzip jede binäre Berechnung darzustellen?</span></label></li>
+      </ol>
+    </section>
+
+    <section class="lecture" id="l9" data-lecture>
+      <div class="lhead">
+        <span class="lnum">L9</span>
+        <h2>Tuning Curves &amp; Winner-Take-All-Netzwerke</h2>
+        <span class="progress-badge">0 / 6</span>
+      </div>
+      <p class="focus"><b>Fokus:</b> die Intuition hinter Skalarprodukt-Tuning und
+      Konkurrenz-durch-Hemmung — Phasenraum und Nullklinen darfst du dir als Bild
+      merken, nicht als Gleichungssystem.</p>
+      <ol class="qlist">
+        <li><label class="q"><input type="checkbox" data-id="l9-1"><span class="qnum">L9.1</span><span class="qtext"><span class="tag">Tuning</span>Warum reagiert ein Neuron am stärksten, wenn der Eingangsvektor parallel zum Gewichtsvektor liegt? Was bedeutet das anschaulich („Template Matching“)?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l9-2"><span class="qnum">L9.2</span><span class="qtext"><span class="tag">WTA-Idee</span>Was ist die Grundidee eines Winner-take-all-Netzwerks, und welche Rolle spielt die gemeinsame Inhibition dabei?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l9-3"><span class="qnum">L9.3</span><span class="qtext"><span class="tag">Szenarien</span>Was unterscheidet die drei besprochenen Szenarien (symmetrischer Fixpunkt, klarer Gewinner, Saddle-node) qualitativ voneinander?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l9-4"><span class="qnum">L9.4</span><span class="qtext"><span class="tag">Bifurkation</span>Was bedeutet „critical slowing down“ in der Nähe einer Saddle-node-Bifurkation, und wie zeigt es sich im Zeitverlauf der Populationsaktivitäten?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l9-5"><span class="qnum">L9.5</span><span class="qtext"><span class="tag">Klassifikator</span>Wie kombiniert man Tuning und WTA-Konkurrenz zu einem einfachen neuronalen „Klassifikator“?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l9-6"><span class="qnum">L9.6</span><span class="qtext"><span class="tag">Symmetriebruch</span>Warum entscheidet bei symmetrischem, aber starkem Input allein die Anfangsbedingung, welche Population gewinnt?</span></label></li>
+      </ol>
+    </section>
+
+    <section class="lecture" id="l10" data-lecture>
+      <div class="lhead">
+        <span class="lnum">L10</span>
+        <h2>Neuronale Plastizität</h2>
+        <span class="progress-badge">0 / 13</span>
+      </div>
+      <p class="focus"><b>Fokus:</b> die größte Fragenmenge — Kurz- vs. Langzeit­plastizität,
+      STDP und seine Grenzen, sowie die molekulare Rolle von NMDA/bAP als
+      Koinzidenzdetektion. Reines Konzeptverständnis, keine Kinetik-Formeln des
+      Tsodyks-Markram-Modells.</p>
+      <ol class="qlist">
+        <li><label class="q"><input type="checkbox" data-id="l10-1"><span class="qnum">L10.1</span><span class="qtext"><span class="tag">Speicher-Argument</span>Warum kann die synaptische Konfiguration des Gehirns nicht vollständig genetisch kodiert sein? Reproduziere das Argument über die Speicherkapazität.</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l10-2"><span class="qnum">L10.2</span><span class="qtext"><span class="tag">Rewiring</span>Was zeigt das Experiment mit visuellem Input in den auditorischen Cortex über die Natur der kortikalen Verarbeitung?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l10-3"><span class="qnum">L10.3</span><span class="qtext"><span class="tag">Intrinsische Plastizität</span>Was ist intrinsische Plastizität, und wie unterscheidet sie sich von synaptischer Plastizität?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l10-4"><span class="qnum">L10.4</span><span class="qtext"><span class="tag">STP-Modell</span>Erkläre die drei Zustände R, E, I im Tsodyks-Markram-Modell anschaulich über den Vesikelzyklus.</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l10-5"><span class="qnum">L10.5</span><span class="qtext"><span class="tag">Facilitation/Depression</span>Wie kann dieselbe präsynaptische Zelle an zwei verschiedenen Zielsynapsen einmal Facilitation und einmal Depression zeigen?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l10-6"><span class="qnum">L10.6</span><span class="qtext"><span class="tag">Netzwerkstabilität</span>Wie trägt Kurzzeitplastizität zur Selbststabilisierung eines rekurrenten Netzwerks bei?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l10-7"><span class="qnum">L10.7</span><span class="qtext"><span class="tag">LTP/LTD-Grundlagen</span>Was unterscheidet Langzeitplastizität grundsätzlich von Kurzzeitplastizität (Zeitskala, Persistenz)?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l10-8"><span class="qnum">L10.8</span><span class="qtext"><span class="tag">STDP</span>Erkläre das Grundprinzip von STDP: Was passiert bei kausalen (pre-vor-post) vs. akausalen (post-vor-pre) Spike-Paaren?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l10-9"><span class="qnum">L10.9</span><span class="qtext"><span class="tag">Vorsicht</span>Warum ist die Aussage „STDP ist eine universelle Lernregel“ mit Vorsicht zu genießen? Nenne zwei Einschränkungen aus der Vorlesung.</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l10-10"><span class="qnum">L10.10</span><span class="qtext"><span class="tag">NMDA</span>Welche Doppelrolle spielt der NMDA-Rezeptor bei der LTP-Induktion, und warum macht ihn das zu einem molekularen Koinzidenzdetektor?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l10-11"><span class="qnum">L10.11</span><span class="qtext"><span class="tag">bAP</span>Was ist ein „back-propagating action potential“, und welche Funktion erfüllt es bei der postsynaptischen LTP-Induktion?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l10-12"><span class="qnum">L10.12</span><span class="qtext"><span class="tag">LTP ≠ −LTD</span>Wie zeigt das Experiment von O'Connor et al., dass LTP und LTD über unterschiedliche biochemische Pfade laufen, statt nur entgegengesetzte Vorzeichen desselben Prozesses zu sein?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l10-13"><span class="qnum">L10.13</span><span class="qtext"><span class="tag">Präsynaptische LTD</span>Erkläre den Mechanismus der präsynaptischen LTD über Endocannabinoide — warum handelt es sich hier um ein „retrogrades“ Signal?</span></label></li>
+      </ol>
+    </section>
+
+    <footer class="end">
+      Quelle ausschließlich <code>html_lec/bic_l4…l10_lesbar.html</code> — keine
+      Lösungen hinterlegt, konsistent mit dem Selbst-Spoiler-Verbot der übrigen
+      Klausurvorbereitung. Fortschritt liegt lokal im Browser (localStorage) und
+      wird nicht synchronisiert.
+    </footer>
+  </main>
+</div>
+
+<script>
+(function(){
+  var PREFIX = 'bicfrei_';
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('input[type="checkbox"][data-id]'));
+
+  boxes.forEach(function(cb){
+    var key = PREFIX + cb.dataset.id;
+    if (localStorage.getItem(key) === '1') cb.checked = true;
+    cb.addEventListener('change', function(){
+      localStorage.setItem(key, cb.checked ? '1' : '0');
+      updateCounts();
+    });
+  });
+
+  function updateCounts(){
+    document.querySelectorAll('section[data-lecture]').forEach(function(sec){
+      var secBoxes = sec.querySelectorAll('input[type="checkbox"]');
+      var done = Array.prototype.filter.call(secBoxes, function(b){ return b.checked; }).length;
+      var total = secBoxes.length;
+      var badge = sec.querySelector('.progress-badge');
+      if (badge) badge.textContent = done + ' / ' + total;
+      var link = document.querySelector('.navlink[href="#' + sec.id + '"] .count');
+      if (link) link.textContent = done + '/' + total;
+    });
+  }
+
+  document.getElementById('resetBtn').addEventListener('click', function(){
+    if (!confirm('Gesamten Fortschritt auf dieser Seite zurücksetzen?')) return;
+    boxes.forEach(function(cb){
+      localStorage.removeItem(PREFIX + cb.dataset.id);
+      cb.checked = false;
+    });
+    updateCounts();
+  });
+
+  updateCounts();
+})();
+</script>
+
+</body>
+</html>
