@@ -72,7 +72,25 @@ kein weiterer möglich. Das **entfernt kurze ISIs**, macht den Zug **regelmäßi
 Exponentialverteilung. Solche Prozesse mit „Gedächtnis nur bis zum letzten Spike" heißen
 **Renewal-Prozesse** (formal in L7) — der LIF-Reset erzeugt genau so einen Prozess.
 
-## 6 · Peri-Stimulus-Time-Histogram (PSTH)
+## 6 · Perspektivwechsel: Bottom-up vs. Top-down
+
+Bis hierher (L1–L5) wurde das neuronale System **bottom-up** aufgebaut: aus der
+**Biophysik** (Ionenkanäle, LIF, Synapsen), mit **vereinfachten Modellen**, um die Antwort
+zu **vorherzusagen**. Die statistische Beschreibung eröffnet den umgekehrten, **top-down**
+Blick: das System wird als **Black Box** behandelt (biophysik-**agnostisch**), man geht von
+**Messungen** aus und beschreibt die **charakteristische** Antwort.
+
+| | Bottom-up (bisher) | Top-down (jetzt) |
+|---|--------------------|------------------|
+| Grundlage | Biophysik | agnostisch (Black Box) |
+| Modelle | vereinfachte Modelle | Messungen |
+| Ziel | Antwort **vorhersagen** | **charakteristische** Antwort |
+
+In diesem Rahmen unterscheidet man **Encoding** (wie ein Stimulus in Spikes übersetzt wird)
+und **Decoding** (wie man aus Spikes den Stimulus rekonstruiert) — die Werkzeuge dazu
+(Korrelation, PSD, STA) folgen in **L7**.
+
+## 7 · Peri-Stimulus-Time-Histogram (PSTH)
 
 Bei einem **wiederholten** Reiz variiert die Antwort von Trial zu Trial. Das **PSTH**
 schätzt die zeitabhängige Rate:
@@ -193,6 +211,15 @@ A) Sie ist symmetrisch um ⟨ISI⟩.
 B) Sie hat ihr Maximum bei s = 0 (kurze ISIs am wahrscheinlichsten).
 C) Sie hat ihr Maximum bei großen s.
 D) Sie ist nur bei Refraktärzeit definiert.
+:::
+
+::: mc
+**MC 6.11** — Was kennzeichnet die **Top-down**-Perspektive (im Gegensatz zu Bottom-up)?
+
+A) Aufbau aus Ionenkanälen und LIF-Gleichungen.
+B) Vorhersage der Antwort aus der Biophysik.
+C) Das System wird als Black Box aus Messungen charakterisiert (biophysik-agnostisch).
+D) Sie ist nur für einzelne Spikes definiert.
 :::
 
 ## Freitext-Fragen (zum Besprechen)

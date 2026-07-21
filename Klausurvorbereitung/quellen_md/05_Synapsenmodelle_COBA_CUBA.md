@@ -17,7 +17,8 @@ Jede Synapse ist ein **zeitabhängiger Leitwert** g<sub>k</sub>(t) mit eigenem
 <p class="formula">C du/dt = −g<sub>L</sub>(u−E<sub>L</sub>) − Σ<sub>k</sub> g<sub>k</sub>(t)(u−E<sub>k</sub>)</p>
 
 Der synaptische Strom eines Kanals ist **g<sub>k</sub>(t)·(u−E<sub>k</sub>)** — also
-**proportional zur Differenz** zwischen aktuellem Potential und E<sub>k</sub>.
+**proportional zur Differenz** zwischen aktuellem Potential und E<sub>k</sub>. Das
+synaptische Gewicht w hat bei COBA die Einheit eines **Leitwerts [S] (Siemens)**.
 
 ### 2.1 · Eigenschaften
 
@@ -37,9 +38,14 @@ Der synaptische Strom eines Kanals ist **g<sub>k</sub>(t)·(u−E<sub>k</sub>)**
 
 ## 3 · CUBA — Current-Based Synapses
 
-Jede Synapse ist ein reiner **Strom** I<sub>k</sub>(t), **unabhängig** vom Membranpotential:
+Jede Synapse ist ein reiner **Strom** I<sub>k</sub>(t), **unabhängig** vom Membranpotential
+(kein (u−E)-Term); das Gewicht w hat hier die Einheit eines **Stroms [A] (Ampere)**:
 
 <p class="formula">C du/dt = −g<sub>L</sub>(u−E<sub>L</sub>) + Σ<sub>k</sub> I<sub>k</sub>(t)</p>
+
+Weil CUBA linear und u-unabhängig ist, existiert für exponentielle Kernel sogar eine
+**geschlossene Lösung** (die PSP-Form ist eine Difference of Exponentials, symmetrisch in
+τ<sub>m</sub> ↔ τ<sub>syn</sub>) — man muss keine DGL numerisch lösen.
 
 ### 3.1 · Eigenschaften
 
@@ -74,8 +80,10 @@ gewichtete Summe über alle präsynaptischen Spikes:
   Zeitparameter; Maximum bei t = τ.
 
 In Simulatoren wie **NEST** sind exponentielle und Alpha-Kernel Standard. Die Vorfaktor-
-Konstante A vor dem Kernel legt die **physikalische Einheit** fest (bei COBA eine
-Leitwert-Größe, bei CUBA eine Ladung/Strom).
+Konstante A vor dem Kernel legt die **physikalische Einheit** und die **Normierung** fest.
+NEST wählt z. B. A = τ<sub>syn</sub> (exp) bzw. A = e·τ<sub>syn</sub> (alpha), sodass der
+Kernel auf **max(ε) = 1** normiert ist. **Warnung:** Verschiedene Bücher/Simulatoren nutzen
+**unterschiedliche Normierungen** — bei Zahlenwerten immer die Konvention prüfen.
 
 ## 5 · Der High-Conductance State (HCS)
 

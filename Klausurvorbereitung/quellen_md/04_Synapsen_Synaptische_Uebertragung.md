@@ -65,7 +65,14 @@ vom Transmitter an sich:
 
 **Integration:** Ein Neuron summiert viele EPSPs/IPSPs in **Raum** (verschiedene Dendriten)
 und **Zeit**. Überschreitet die Summe die Schwelle, entsteht ein Spike → das Neuron ist ein
-räumlich-zeitlicher **Koinzidenzdetektor** (L11).
+räumlich-zeitlicher **Koinzidenzdetektor** (L11). Ein einzelnes PSP ist dabei klein
+(**≈ 1 mV**, Verzögerung wenige ms nach dem Spike) — erst viele zusammen bringen die Zelle
+zum Feuern.
+
+**Dale's principle:** *„A neuron releases the same set of transmitters at all of its
+synapses."* Ein Neuron setzt also an **allen** seinen Synapsen denselben Transmitter frei
+und wirkt daher einheitlich — man kann es über den Typ seiner nachgeschalteten Synapsen als
+**exzitatorisch** oder **inhibitorisch** charakterisieren (nicht beides gemischt).
 
 ## 4 · Wichtige Synapsentypen
 
@@ -199,6 +206,15 @@ A) NMDA
 B) GABA_A
 C) Ach
 D) AMPA
+:::
+
+::: mc
+**MC 4.11** — Was besagt **Dale's principle**?
+
+A) Ein Neuron setzt an all seinen Synapsen denselben Transmitter frei → einheitlich exz. oder inh.
+B) Jede Synapse ist stets bidirektional.
+C) Ein Neuron wechselt je nach Ziel zwischen erregend und hemmend.
+D) Nur Interneurone besitzen Synapsen.
 :::
 
 ## Freitext-Fragen (zum Besprechen)

@@ -86,8 +86,15 @@ alle diese Reizausschnitte. Ergebnis:
 
 - der **durchschnittliche Reiz, der einem Spike vorausgeht** → schätzt das **lineare
   rezeptive Feld** / den bevorzugten Reiz des Neurons.
+- **Zusammenhang mit der Korrelation:** Die STA ist (bis auf den Faktor 1/ν) die
+  **Kreuzkorrelation** von Spike-Train und Reiz: STA(τ) = (1/ν)·C<sub>ρx</sub>(−τ).
 - **Beispiel:** elektrosensorisches Neuron des schwach elektrischen Fisches *Eigenmannia*
-  (Gabbiani et al., 1996) — die STA zeigt die charakteristische Reizform vor einem Spike.
+  (Gabbiani et al., 1996) — die STA zeigt die charakteristische (biphasische) Reizform vor
+  einem Spike → das Neuron reagiert auf eine zeitliche **Änderung**, nicht auf einen
+  konstanten Wert.
+- **Warnung (Stimulus-Statistik):** Die STA hängt von der **Reizstatistik** ab (man misst
+  nur, was präsentiert wurde). Für eine **unverzerrte** Schätzung nutzt man daher einen
+  **White-Noise-Stimulus** (alle Frequenzen gleich stark).
 - **Grenze:** Die STA ist ein **lineares** Maß; stark nichtlineare Antworten (z. B.
   richtungs-/kontrastinvariante Zellen) erfasst sie nur unvollständig.
 
@@ -201,6 +208,15 @@ A) aus dem Reset-Potential
 B) aus der ISI-Verteilung P<sub>ISI</sub>(τ)
 C) aus der Membrankapazität
 D) aus der Schwelle ϑ
+:::
+
+::: mc
+**MC 7.11** — Warum verwendet man zur STA-Messung bevorzugt einen **White-Noise-Stimulus**?
+
+A) Weil White Noise die Feuerrate maximiert.
+B) Weil die STA sonst gar nicht definiert ist.
+C) Weil White Noise alle Frequenzen gleich enthält → unverzerrte Schätzung (STA hängt von der Reizstatistik ab).
+D) Weil nur so die Refraktärzeit sichtbar wird.
 :::
 
 ## Freitext-Fragen (zum Besprechen)

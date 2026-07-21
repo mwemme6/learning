@@ -65,6 +65,7 @@
 | 4.8 | **C** | Shunting inhibition: Hemmung durch erhöhten Leitwert, auch ohne Hyperpolarisation. |
 | 4.9 | **A** | Vesikelfreisetzung ist stochastisch/probabilistisch. |
 | 4.10 | **A** | NMDA: längste Zeitkonstante (~20 ms), leitet Ca²⁺. |
+| 4.11 | **A** | Dale's principle: gleicher Transmitter an allen Synapsen → Neuron einheitlich exz./inh. |
 
 ## Vorlesung 05 · Synapsenmodelle COBA/CUBA
 
@@ -95,6 +96,7 @@
 | 6.8 | **A** | C<sub>V</sub> ≈ 0 → nahezu periodisch/sehr regelmäßig. |
 | 6.9 | **B** | Binomial → Poisson: Produkt M·p = νT konstant halten. |
 | 6.10 | **B** | Exp-ISI-Verteilung: Maximum bei s = 0 (kurze ISIs am wahrscheinlichsten). |
+| 6.11 | **C** | Top-down = Black-Box-Charakterisierung aus Messungen (biophysik-agnostisch), vs. Bottom-up (Biophysik). |
 
 ## Vorlesung 07 · Korrelation, Renewal, PSD & STA
 
@@ -110,6 +112,7 @@
 | 7.8 | **D** | Reset löscht die Vergangenheit → aufeinanderfolgende ISIs unabhängig → Renewal. |
 | 7.9 | **A** | STA ist ein lineares Maß → stark nichtlineare Antworten nur unvollständig erfasst. |
 | 7.10 | **B** | Aus der ISI-Verteilung P<sub>ISI</sub>(τ) folgt via Wiener-Chintschin die PSD. |
+| 7.11 | **C** | White Noise enthält alle Frequenzen gleich → unverzerrte STA (hängt sonst von der Reizstatistik ab). |
 
 ## Vorlesung 08 · Neuronale Codes & Netze
 
@@ -117,7 +120,7 @@
 |:-----:|:-------:|------------|
 | 8.1 | **B** | Place-Code nutzt die Identität des feuernden Neurons (Ortszellen). |
 | 8.2 | **D** | On-Center-Felder → Difference of Gaussians (DoG). |
-| 8.3 | **A** | LIF kann NAND realisieren; NAND ist universell → Turing-vollständig. |
+| 8.3 | **A** | Kleines Rate-Netz realisiert NAND; NAND funktional vollständig → Turing-vollständig. |
 | 8.4 | **A** | Delay-Line + Koinzidenzdetektor = Temporal-Code (µs-Präzision). |
 | 8.5 | **C** | ν<sub>out</sub> = F(Σw<sub>j</sub>ν<sub>j</sub>): Brücke zu Perzeptron/Deep Learning. |
 | 8.6 | **D** | NOT(x) = NAND(x, x). |
@@ -125,6 +128,8 @@
 | 8.8 | **D** | Temporal-Code hat die höchste zeitliche Auflösung. |
 | 8.9 | **C** | Phase Precession = Phase-Code (relativ zur Theta-Oszillation). |
 | 8.10 | **B** | Rule-based ist möglich (Turing-vollständig), aber nicht der natürliche/effiziente Modus. |
+| 8.11 | **B** | NOT = 1 Neuron (Gewicht −1, Bias H+L); NAND = zweistufiges Netz (Nichtlinearität an z₁). |
+| 8.12 | **A** | Rekurrentes Rate-Netz: F = Aktivierungsfunktion, b<sub>k</sub> = Bias, mit Rückkopplung w<sub>kj</sub>z<sub>j</sub>. |
 
 ## Vorlesung 09 · Tuning, Netzdynamik & WTA
 
