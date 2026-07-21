@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Freitextfragen L4–L10 · Brain-Inspired Computing</title>
+<title>Freitextfragen L4–L11 · Brain-Inspired Computing</title>
 <style>
   :root{
     --bg:#eef1ec;
@@ -209,7 +209,7 @@
 
 <div class="layout">
   <nav class="nav" aria-label="Vorlesungen">
-    <div class="brand">Freitextfragen<small>Brain-Inspired&nbsp;Computing · L4–L10</small></div>
+    <div class="brand">Freitextfragen<small>Brain-Inspired&nbsp;Computing · L4–L11</small></div>
     <ul class="navlist">
       <li><a class="navlink" href="#l4"><span><span class="lnum">L4</span>Synapsen</span><span class="count">0/9</span></a></li>
       <li><a class="navlink" href="#l5"><span><span class="lnum">L5</span>COBA / CUBA</span><span class="count">0/7</span></a></li>
@@ -218,6 +218,7 @@
       <li><a class="navlink" href="#l8"><span><span class="lnum">L8</span>Codes & Netze</span><span class="count">0/8</span></a></li>
       <li><a class="navlink" href="#l9"><span><span class="lnum">L9</span>Tuning & WTA</span><span class="count">0/6</span></a></li>
       <li><a class="navlink" href="#l10"><span><span class="lnum">L10</span>Plastizität</span><span class="count">0/13</span></a></li>
+      <li><a class="navlink" href="#l11"><span><span class="lnum">L11</span>Neuromorphe HW</span><span class="count">0/13</span></a></li>
     </ul>
     <button class="reset" id="resetBtn" type="button">Fortschritt zurücksetzen</button>
   </nav>
@@ -225,9 +226,10 @@
   <main class="content">
     <header class="top">
       <div class="eyebrow">Mündliche Prüfung · Vertiefung</div>
-      <h1>Freitextfragen zu L4–L10</h1>
-      <p>Verständnisfragen, ausschließlich aus den ausführlichen Vorlesungsmitschriften
-      (<code>html_lec/bic_l4…l10_lesbar.html</code>) destilliert — bewusst ohne
+      <h1>Freitextfragen zu L4–L11</h1>
+      <p>Verständnisfragen, für L4–L10 aus den ausführlichen Vorlesungsmitschriften
+      (<code>html_lec/bic_l4…l10_lesbar.html</code>) und für L11 direkt aus den
+      Original-Folien (<code>lectures/bic_l11.pdf</code>) destilliert — bewusst ohne
       Herleitungen oder Rechenaufgaben. Wo eine Gleichung wirklich zentral ist
       (Membrangleichung, Leaky Integrator), wird nach ihrer <em>Bedeutung</em> gefragt,
       nicht nach ihrer Berechnung.</p>
@@ -386,11 +388,37 @@
       </ol>
     </section>
 
+    <section class="lecture" id="l11" data-lecture>
+      <div class="lhead">
+        <span class="lnum">L11</span>
+        <h2>Neuromorphe Hardware &amp; BrainScaleS</h2>
+        <span class="progress-badge">0 / 13</span>
+      </div>
+      <p class="focus"><b>Fokus:</b> die Systemebene — warum überhaupt physikalisch statt
+      digital rechnen, wie BrainScaleS Biologie in Silizium abbildet, und wie Plastizität
+      dort zum Feature statt zum Kalibrierproblem wird. Keine Schaltplan-Details.</p>
+      <ol class="qlist">
+        <li><label class="q"><input type="checkbox" data-id="l11-1"><span class="qnum">L11.1</span><span class="qtext"><span class="tag">Von-Neumann-Flaschenhals</span>Was versteht man unter dem „Von-Neumann-Flaschenhals“, und wie löst neuromorphes In-Memory-Computing dieses Problem konzeptionell?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l11-2"><span class="qnum">L11.2</span><span class="qtext"><span class="tag">Neuromorpher Algorithmus</span>Was muss ein „neuromorpher Algorithmus“ laut Vorlesung festlegen (drei Punkte)? Warum reicht die Netzwerktopologie allein nicht aus?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l11-3"><span class="qnum">L11.3</span><span class="qtext"><span class="tag">Physical Computing</span>Was bedeutet „the algorithm is embodied in the substrate“ — wie unterscheidet sich das von einem klassischen Programm, das auf einem Prozessor läuft?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l11-4"><span class="qnum">L11.4</span><span class="qtext"><span class="tag">Rate vs. Spike</span>Vergleiche das klassische Perzeptron-Modell mit dem spike-basierten Modell aus der Vorlesung: Was gewinnt man mit zeitkontinuierlicher, rekurrenter, spike-basierter Verarbeitung?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l11-5"><span class="qnum">L11.5</span><span class="qtext"><span class="tag">Systemvergleich</span>Vergleiche SpiNNaker, TrueNorth/Loihi und BrainScaleS entlang der Achse „biologischer Realismus“ vs. „Ease of use“. Wo steht BrainScaleS, und warum?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l11-6"><span class="qnum">L11.6</span><span class="qtext"><span class="tag">Beschleunigung</span>Warum braucht BrainScaleS überhaupt eine Beschleunigung gegenüber Echtzeit? Nenne den Kerngrund aus der „inherent speed gap“-Betrachtung.</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l11-7"><span class="qnum">L11.7</span><span class="qtext"><span class="tag">TimeScales</span>Warum unterscheiden sich die relevanten Zeitskalen von Kausalitätserkennung, synaptischer Plastizität, Lernen und Entwicklung um so viele Größenordnungen — und was bringt ein einheitlicher Beschleunigungsfaktor dafür?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l11-8"><span class="qnum">L11.8</span><span class="qtext"><span class="tag">BrainScaleS-Architektur</span>Was unterscheidet BrainScaleS strukturell von einem rein digitalen System wie Loihi — analog vs. digital, und an welcher Stelle genau?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l11-9"><span class="qnum">L11.9</span><span class="qtext"><span class="tag">Strukturelle Plastizität</span>Erkläre anschaulich, wie BrainScaleS „strukturelle Plastizität“ umsetzt — was bedeutet „assign random pre-synaptic neurons, evaluate correlation, keep the best“?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l11-10"><span class="qnum">L11.10</span><span class="qtext"><span class="tag">Hybrid Plasticity</span>Was ist an „Hybrid Plasticity“ neu gegenüber reiner STDP? Welche drei Terme kombiniert die gezeigte Lernregel, und wozu dient der homöostatische Term?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l11-11"><span class="qnum">L11.11</span><span class="qtext"><span class="tag">Lernen = Kalibrierung</span>Was bedeutet die Aussage „learning is calibration“ am Pong-Beispiel? Wie löst das biologisch inspirierte Lernen das Problem, Millionen Parameter (Topologie, Neuronenparameter, Gewichte) festlegen zu müssen — Bezug zu L10?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l11-12"><span class="qnum">L11.12</span><span class="qtext"><span class="tag">Spike-Latency-Coding</span>Warum eignet sich Spike-Latency-Coding besonders gut für schnelle, energieeffiziente Inferenz auf neuromorpher Hardware?</span></label></li>
+        <li><label class="q"><input type="checkbox" data-id="l11-13"><span class="qnum">L11.13</span><span class="qtext"><span class="tag">Dual Use</span>Inwiefern dient BrainScaleS gleichzeitig als Werkzeug für Neurowissenschaft (physikalisches Modell) und als potenziell effiziente KI-Hardware? Was ist jeweils die entscheidende Eigenschaft dafür?</span></label></li>
+      </ol>
+    </section>
+
     <footer class="end">
-      Quelle ausschließlich <code>html_lec/bic_l4…l10_lesbar.html</code> — keine
-      Lösungen hinterlegt, konsistent mit dem Selbst-Spoiler-Verbot der übrigen
-      Klausurvorbereitung. Fortschritt liegt lokal im Browser (localStorage) und
-      wird nicht synchronisiert.
+      Quelle: für L4–L10 <code>html_lec/bic_l4…l10_lesbar.html</code>, für L11 direkt
+      <code>lectures/bic_l11.pdf</code> — keine Lösungen hinterlegt, konsistent mit dem
+      Selbst-Spoiler-Verbot der übrigen Klausurvorbereitung. Fortschritt liegt lokal im
+      Browser (localStorage) und wird nicht synchronisiert.
     </footer>
   </main>
 </div>

@@ -127,8 +127,8 @@ mit <b>kritischer Verlangsamung</b>. Viele WTA-Populationen + Tuning = Klassifik
 **MC 9.1** — Ein Neuron z<sub>k</sub> = F(**V**<sub>k</sub>·**x**) reagiert bei fester
 Reizstärke ‖**x**‖ maximal, wenn der Input …
 
-A) orthogonal zum Gewichtsvektor **V**<sub>k</sub> steht
-B) **parallel** zum Gewichtsvektor **V**<sub>k</sub> liegt
+A) orthogonal zum Gewichtsvektor V<sub>k</sub> steht
+B) parallel zum Gewichtsvektor V<sub>k</sub> liegt
 C) minimale Norm hat
 D) rein zufälliges Rauschen ist
 :::
@@ -138,7 +138,7 @@ D) rein zufälliges Rauschen ist
 
 A) als Refraktärzeit des Neurons
 B) als Poisson-Rate des Inputs
-C) als **bevorzugtes Eingangsmuster / räumlicher Kernel** (Template-Matching)
+C) als bevorzugtes Eingangsmuster / räumlicher Kernel (Template-Matching)
 D) als Membranzeitkonstante
 :::
 
@@ -147,7 +147,7 @@ D) als Membranzeitkonstante
 
 A) reiner Hochpass
 B) idealer Integrator ohne Leck
-C) **Tiefpass** mit Green-Funktion G(t) = Θ(t) e<sup>−t/τ</sup>
+C) Tiefpass mit Green-Funktion G(t) = Θ(t) e<sup>−t/τ</sup>
 D) NAND-Gatter
 :::
 
@@ -158,14 +158,14 @@ Impulsantwort …
 A) eine Sinusschwingung
 B) eine lineare Rampe
 C) ein reiner Dirac-Impuls
-D) eine **Difference of Exponentials**
+D) eine Difference of Exponentials
 :::
 
 ::: mc
 **MC 9.5** — Wodurch konkurrieren die beiden exzitatorischen Populationen im WTA-Modell der
 Vorlesung?
 
-A) über eine **gemeinsame inhibitorische Population** (geteilte Hemmung)
+A) über eine gemeinsame inhibitorische Population (geteilte Hemmung)
 B) über elektrische Synapsen (Gap Junctions)
 C) über direkte gegenseitige Erregung
 D) gar nicht — sie sind unabhängig
@@ -177,7 +177,7 @@ das WTA-System …
 
 A) gar keinen Fixpunkt
 B) genau einen instabilen Grenzzyklus
-C) **drei stabile Fixpunkte** (ein symmetrischer + zwei Gewinner-Fixpunkte)
+C) drei stabile Fixpunkte (ein symmetrischer + zwei Gewinner-Fixpunkte)
 D) exakt zwei Fixpunkte und sonst nichts
 :::
 
@@ -185,7 +185,7 @@ D) exakt zwei Fixpunkte und sonst nichts
 **MC 9.7** — Bei **asymmetrischem** Input (\|V<sub>1</sub> − V<sub>2</sub>\| > δ) …
 
 A) feuern beide Populationen exakt gleich stark
-B) gibt es **einen** stabilen Fixpunkt — der stärker getriebene Kanal gewinnt
+B) gibt es einen stabilen Fixpunkt — der stärker getriebene Kanal gewinnt
 C) verschwindet jede Aktivität
 D) entsteht eine Poisson-Statistik
 :::
@@ -194,7 +194,7 @@ D) entsteht eine Poisson-Statistik
 **MC 9.8** — Was passiert bei V<sub>1</sub> = V<sub>2</sub> ≳ 4,7?
 
 A) das System wird rein linear
-B) **Saddle-node-Bifurkation** — kleinste Anfangsunterschiede entscheiden den Gewinner
+B) Saddle-node-Bifurkation — kleinste Anfangsunterschiede entscheiden den Gewinner
 C) alle Fixpunkte werden instabil und die Aktivität explodiert
 D) die Zeitkonstante τ wird negativ
 :::
@@ -205,7 +205,7 @@ D) die Zeitkonstante τ wird negativ
 A) das Neuron feuert gar nicht mehr
 B) die Membranzeitkonstante sinkt auf 0
 C) globale Synchronisation aller Neuronen
-D) das System **verharrt lange** im labilen symmetrischen Zustand und schaltet dann **abrupt** um
+D) das System verharrt lange im labilen symmetrischen Zustand und schaltet dann abrupt um
 :::
 
 ::: mc
@@ -213,7 +213,7 @@ D) das System **verharrt lange** im labilen symmetrischen Zustand und schaltet d
 
 A) ein reines Feed-forward-Signal ohne Funktion
 B) ausschließlich Poisson-Rauschen
-C) ein **Klassifikator**: zuverlässige Detektion + eindeutiger Output-Code (Gewinner nimmt fast alle Aktivität)
+C) ein Klassifikator: zuverlässige Detektion + eindeutiger Output-Code (Gewinner nimmt fast alle Aktivität)
 D) ein idealer linearer Mittelwertbildner
 :::
 

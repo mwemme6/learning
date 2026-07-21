@@ -141,7 +141,7 @@ D) inhibitorisch/hyperpolarisierend (GABA_A)
 
 A) Er ist eine elektrische Synapse.
 B) Er ist besonders schnell.
-C) Er leitet nur bei gleichzeitig präsyn. Glutamat **und** ausreichender postsyn. Depolarisation (Mg²⁺-Block gelöst).
+C) Er leitet nur bei gleichzeitig präsyn. Glutamat und ausreichender postsyn. Depolarisation (Mg²⁺-Block gelöst).
 D) Er reagiert nur auf Cl⁻.
 :::
 

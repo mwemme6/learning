@@ -174,7 +174,7 @@ D) reines LIF
 
 A) TrueNorth arbeitet analog.
 B) BrainScaleS ist rein digital.
-C) BrainScaleS ist **analog** und stark **beschleunigt** (~1000–10 000× Echtzeit); die anderen sind digital (≈/unter Echtzeit).
+C) BrainScaleS ist analog und stark beschleunigt (~1000–10 000× Echtzeit); die anderen sind digital (≈/unter Echtzeit).
 D) Loihi hat keine Neuronen.
 :::
 

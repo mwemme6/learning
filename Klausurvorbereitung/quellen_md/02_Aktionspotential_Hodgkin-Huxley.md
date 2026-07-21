@@ -167,7 +167,7 @@ D) Zeit, in der ein Spike nur mit stärkerem Reiz möglich ist.
 ::: mc
 **MC 2.3** — Welche Aussage zur Feuerschwelle des HH-Modells stimmt?
 
-A) Es gibt keine einfache Schwelle; Amplitude **und** Änderungsrate des Reizes zählen.
+A) Es gibt keine einfache Schwelle; Amplitude und Änderungsrate des Reizes zählen.
 B) Das Feuern hängt nur von der Reizamplitude ab.
 C) Es gibt eine scharf definierte, konstante Spannungsschwelle ϑ.
 D) Die Rheobase ist unabhängig von den Gating-Zeitkonstanten.
@@ -223,7 +223,7 @@ D) 2
 **MC 2.9** — Welche Kombination öffnet den Na⁺-Kanal, sodass er leitet?
 
 A) mindestens ein m offen
-B) alle 3 m offen **und** h offen
+B) alle 3 m offen und h offen
 C) alle 4 n offen
 D) h geschlossen
 :::

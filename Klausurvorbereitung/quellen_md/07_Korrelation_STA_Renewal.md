@@ -152,7 +152,7 @@ D) er gar kein Gedächtnis hat.
 A) ist die Fourier-Transformierte der ISI-Verteilung.
 B) misst die Refraktärzeit.
 C) ist die Autokorrelation des Spike-Trains.
-D) mittelt den Reiz in einem Fenster **vor** jedem Spike und schätzt das lineare rezeptive Feld.
+D) mittelt den Reiz in einem Fenster vor jedem Spike und schätzt das lineare rezeptive Feld.
 :::
 
 ::: mc
@@ -194,7 +194,7 @@ D) Weil der Reset die Vergangenheit löscht → aufeinanderfolgende ISIs sind un
 ::: mc
 **MC 7.9** — Eine wesentliche **Grenze** der STA ist, dass sie …
 
-A) ein **lineares** Maß ist und stark nichtlineare Antworten nur unvollständig erfasst.
+A) ein lineares Maß ist und stark nichtlineare Antworten nur unvollständig erfasst.
 B) nur bei Poisson-Neuronen definiert ist.
 C) das Power-Spektrum nicht kennt.
 D) nur nach dem Spike mittelt.

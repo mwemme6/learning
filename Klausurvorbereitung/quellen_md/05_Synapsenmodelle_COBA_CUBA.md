@@ -200,7 +200,7 @@ D) langsamen Integrator
 dadurch, dass sie …
 
 A) keine Abfallzeit hat.
-B) eine **endliche Anstiegszeit** besitzt.
+B) eine endliche Anstiegszeit besitzt.
 C) nur bei COBA vorkommt.
 D) spannungsabhängig ist.
 :::
