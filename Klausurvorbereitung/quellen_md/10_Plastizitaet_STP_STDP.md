@@ -5,8 +5,16 @@
 ## 1 · Wo sitzt das Gedächtnis?
 
 Lernen und Gedächtnis werden überwiegend in **Synapsen** gespeichert — durch Anpassung
-ihrer **Effizienz** (Gewicht). Daneben gibt es weitere plastische Mechanismen auf
-unterschiedlichen Zeitskalen:
+ihrer **Effizienz** (Gewicht).
+
+**Kann diese Information in den Genen stehen? — Speicher-Argument.** Grobabschätzung:
+~10<sup>15</sup> Synapsen im Cortex, aber nur ~10<sup>10</sup> Basenpaare à 2 bit
+≈ (10<sup>10</sup>·2)/(8·2<sup>30</sup>) ≈ **2 GB**. Das Genom ist damit ~1000× **zu klein**,
+um jede Synapse festzulegen → die synaptische Konfiguration **kann nicht genetisch kodiert**
+sein. **Konsequenz:** Synapsen müssen sich durch **Erfahrung** selbst einstellen — das ist
+Lernen (erfahrungsabhängige Plastizität).
+
+Daneben gibt es weitere plastische Mechanismen auf unterschiedlichen Zeitskalen:
 
 - **Strukturelle Plastizität:** Wachstum/Rückbildung von Dendriten, Zellwanderung,
   **Neubildung/Elimination** von Synapsen (Tage bis länger).
@@ -16,9 +24,12 @@ unterschiedlichen Zeitskalen:
 - **Synaptische Plastizität:** kurzzeitig (**STP**, ms–s, reversibel) und langzeitig
   (**LTP/LTD**, **STDP**, Stunden–dauerhaft).
 
-**Illustration der Macht der Plastizität:** Leitet man auditorische Fasern früh in den
-visuellen Cortex um (Sharma et al., 2000), bilden sich dort **orientierungsselektive**
-Cluster wie in V1 → **funktionale Reorganisation** allein durch die Eingangsstatistik.
+**Illustration der Macht der Plastizität (Rewiring):** Leitet man früh in der Entwicklung
+**visuellen Input in den auditorischen Cortex** um (Retina → auditorischer Thalamus → A1;
+Sharma et al., 2000), bilden sich im umverdrahteten **A1** **orientierungsselektive** Cluster
+wie sonst in V1 → **funktionale Reorganisation** allein durch die Eingangsstatistik. Der
+Cortex ist also weitgehend „universell": Die Funktion folgt dem Input, nicht einer festen
+genetischen Vorgabe.
 
 ::: ref
 **Verweise:** Folie L10 „learning", „intrinsic/homeostatic plasticity", „STP (Tsodyks-
@@ -49,6 +60,18 @@ oder **Depression** zeigen.
 **Facilitation:** Ein **adaptiver** Freisetzungsparameter **U(t)** (Ca²⁺-abhängig, folgt
 einer eigenen ODE 0 ≤ U ≤ 1) **steigt** mit jedem Spike → PSPs werden **größer**. Funktion:
 Betonung von **Bursts / hochfrequenten** Eingängen.
+
+Je nach Parametern (U₀, τ<sub>rec</sub>, τ<sub>fac</sub>) erzeugt **dasselbe** Modell alle
+vier gemessenen Verhaltensweisen: **static** (konstant), **depressing** (abnehmend),
+**facilitating** (zunehmend) und **both** (erst Zunahme, dann Abnahme). Der E-Verlauf pro
+Spike sieht dabei aus wie eine **Difference of Exponentials**. Bemerkenswert (Markram et al.
+1998): Ob eine Synapse facilitiert oder deprimiert, hängt vom **Zieltyp** ab — Kurzzeit-
+plastizität ist **zielspezifisch**.
+
+**Netzwerk-Anwendung:** In rekurrenten Netzen wirkt STP als automatische Verstärkungsregelung
+— exzitatorische Synapsen (mit Depression) und inhibitorische (mit Facilitation) koppeln so,
+dass die **Netzwerkaktivität eine moderate Feuerrate hält** und nicht „explodiert"
+(eingebaute Selbst-Stabilisierung ohne externe Kontrolle).
 
 ## 3 · Langzeitplastizität: LTP & LTD
 
@@ -228,6 +251,16 @@ A) STDP tritt nur bei elektrischen Synapsen auf.
 B) STDP hat verschiedene Formen und ist nichtlinear/orts-/frequenzabhängig — nicht universell.
 C) STDP kennt kein Zeitfenster.
 D) STDP ist universell und immer gleich (asymmetrisch, additiv).
+:::
+
+::: mc
+**MC 10.12** — Warum kann die synaptische Konfiguration des Cortex **nicht** vollständig in
+den Genen kodiert sein?
+
+A) Weil Gene keine Proteine kodieren.
+B) Weil Synapsen keine Information speichern.
+C) Weil ~10¹⁵ Synapsen viel mehr Speicher bräuchten, als die ~10¹⁰ Basenpaare (≈ 2 GB) bieten.
+D) Weil das Genom sich täglich ändert.
 :::
 
 ## Freitext-Fragen (zum Besprechen)

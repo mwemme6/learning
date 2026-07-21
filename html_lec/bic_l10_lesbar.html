@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIC Lecture 10 – Neural plasticity</title>
+<script>window.MathJax={tex:{inlineMath:[['\\(','\\)']],displayMath:[['\\[','\\]']]},svg:{fontCache:'global'}};</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-svg.min.js"></script>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1c2530;--muted:#5b6875;--accent:#2f6db0;--accent-soft:#eaf2fb;--line:#e2e6eb;--note:#f0f7f0;--note-border:#57a05a;--note-ink:#2f5d32;}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.6;font-size:17px;}
+  .wrap{max-width:820px;margin:0 auto;padding:32px 20px 80px;}
+  header.top{text-align:center;padding:28px 20px;margin-bottom:28px;background:linear-gradient(135deg,#2f6db0,#3f8ac9);color:#fff;border-radius:16px;}
+  header.top .kicker{font-size:14px;letter-spacing:.14em;text-transform:uppercase;opacity:.9;}
+  header.top h1{margin:8px 0 4px;font-size:26px;} header.top .sub{opacity:.92;font-size:15px;}
+  nav.toc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 20px;margin-bottom:30px;}
+  nav.toc h2{margin:0 0 8px;font-size:14px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}
+  nav.toc ol{margin:0;padding-left:20px;} nav.toc a{color:var(--accent);text-decoration:none;} nav.toc a:hover{text-decoration:underline;}
+  section.slide{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 26px;margin-bottom:22px;box-shadow:0 1px 3px rgba(20,30,45,.04);}
+  .slidenum{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--accent);background:var(--accent-soft);padding:3px 10px;border-radius:20px;margin-bottom:10px;}
+  section.slide h2{margin:2px 0 14px;font-size:22px;color:var(--ink);border-bottom:2px solid var(--accent-soft);padding-bottom:8px;}
+  section.slide h3{margin:20px 0 8px;font-size:17px;color:var(--accent);}
+  ul,ol.n{margin:8px 0;padding-left:22px;} li{margin:5px 0;} p{margin:8px 0;}
+  .arrow{color:var(--accent);font-weight:700;}
+  .note{background:var(--note);border-left:4px solid var(--note-border);border-radius:6px;padding:10px 14px;margin:12px 0;font-size:15.5px;color:var(--note-ink);}
+  .eqbox{background:#fbfcfd;border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:6px;padding:6px 14px;margin:12px 0;overflow-x:auto;}
+  .keybox{background:#fff8e8;border:1px solid #e8d48a;border-left:4px solid #d9a520;border-radius:6px;padding:6px 14px;margin:12px 0;overflow-x:auto;}
+  .quote{font-style:italic;border-left:3px solid var(--muted);padding-left:14px;color:#3a4653;margin:12px 0;}
+  table{border-collapse:collapse;width:100%;margin:12px 0;font-size:15px;} th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top;} th{background:var(--accent-soft);}
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:30px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <div class="kicker">Brain Inspired Computing · Lecture 10</div>
+  <h1>Neural plasticity</h1>
+  <div class="sub">Prof. Dr. Johannes Schemmel — lesbare Fassung der Vorlesungsnotizen</div>
+</header>
+
+<nav class="toc">
+  <h2>Inhalt</h2>
+  <ol>
+    <li><a href="#s1">Neural plasticity – Motivation</a></li>
+    <li><a href="#s2">Rewiring visual → auditory cortex</a></li>
+    <li><a href="#s3">Intrinsic plasticity</a></li>
+    <li><a href="#s4">Short-term plasticity: Facilitation &amp; Depression</a></li>
+    <li><a href="#s5">Neurotransmitter-Zyklus (STP-Modell)</a></li>
+    <li><a href="#s6">Tsodyks-Markram (TSO) Mechanismus</a></li>
+    <li><a href="#s7">Formale Synapsen-Dynamik</a></li>
+    <li><a href="#s8">Beispiel &amp; Netzwerk-Anwendung</a></li>
+    <li><a href="#s9">STP-Simulationen</a></li>
+    <li><a href="#s10">Long-term plasticity: LTP &amp; LTD</a></li>
+    <li><a href="#s11">Rate-based experiments</a></li>
+    <li><a href="#s12">STDP – What happens in between?</a></li>
+    <li><a href="#s13">Timed-spike stimulation (Bi &amp; Poo)</a></li>
+    <li><a href="#s14">Hebb's postulate</a></li>
+    <li><a href="#s15">Hebb's rule &amp; a word of warning</a></li>
+    <li><a href="#s16">Biophysical foundations – a dilemma</a></li>
+    <li><a href="#s17">Separating LTD and LTP</a></li>
+    <li><a href="#s18">Die Rolle der NMDA-Rezeptoren</a></li>
+    <li><a href="#s19">Molekulare Mechanismen: post-syn. LTP/LTD</a></li>
+    <li><a href="#s20">Pre-synaptic LTD (Endocannabinoide)</a></li>
+  </ol>
+</nav>
+
+<section class="slide" id="s1">
+  <span class="slidenum">Folie 1</span>
+  <h2>Neural plasticity – Motivation</h2>
+  <ul>
+    <li>Das meiste unseres Wissens und Könnens ist in neuronalen Parametern gespeichert — <b>vor allem in den Synapsen</b>.</li>
+    <li>Kann diese Information in den <b>Genen</b> stehen? Schnelle Abschätzung:
+      <ul>
+        <li>ca. \(10^{15}\) Synapsen im (menschlichen) Cortex</li>
+        <li>ca. \(10^{10}\) Basenpaare à 2 bit</li>
+        <li>\(\dfrac{10^{10}\cdot 2}{8\cdot 2^{30}} \approx 2\ \text{GB}\)</li>
+      </ul>
+    </li>
+    <li><span class="arrow">&rarr;</span> Die synaptische Konfiguration <b>kann nicht in den Genen kodiert</b> sein (viel zu wenig Speicher).</li>
+  </ul>
+  <p><b>Lösung:</b> neuronale Plastizität und erfahrungsabhängiges Lernen. Typische Dimensionen der Plastizität:</p>
+  <ul>
+    <li><b>Neuronen:</b> Form (dendritischer Baum, Axonwachstum), Parameter (Ionenkanaldichte, Leitfähigkeit).</li>
+    <li><b>Synapsen:</b> strukturelle Plastizität (Ort/Existenz der Synapse), Gewichte (Größe, Transmitter-Freisetzungswahrscheinlichkeit).</li>
+    <li>Beispiel: Umleitung <b>visueller Fasern in den auditorischen Cortex</b> (junge Frettchen, Sharma et al.).</li>
+  </ul>
+  <div class="note"><b>Erklärung:</b> Das Speicher-Argument ist der Kern: Das Genom ist ~1000× zu klein, um alle Synapsen festzulegen. Also müssen Synapsen sich durch <b>Erfahrung</b> selbst einstellen — das ist Lernen.</div>
+</section>
+
+<section class="slide" id="s2">
+  <span class="slidenum">Folie 2</span>
+  <h2>Rewiring: visueller Input in den auditorischen Cortex</h2>
+  <p>Experiment (Sharma et al. 2000): Auditorische Fasern werden in sehr frühem Entwicklungsstadium in den visuellen Cortex umgeleitet.</p>
+  <ul>
+    <li><b>Normaler Pfad:</b> Retina &rarr; visueller Thalamus &rarr; V1</li>
+    <li><b>Modifizierter Pfad:</b> Retina &rarr; auditorischer Thalamus &rarr; A1</li>
+    <li><b>Ergebnis:</b> Im umverdrahteten A1 bilden sich <b>orientierungsselektive Cluster</b>, ähnlich wie in V1 &rarr; funktionelle Reorganisation durch Plastizität.</li>
+  </ul>
+  <div class="note"><b>Erklärung:</b> Starker Beleg dafür, dass der Cortex „universell“ ist: Bekommt A1 visuellen Input, entwickelt es visuelle Verarbeitungsstrukturen. Die Funktion folgt dem Input, nicht einer festen genetischen Vorgabe.</div>
+</section>
+
+<section class="slide" id="s3">
+  <span class="slidenum">Folie 3</span>
+  <h2>Intrinsic plasticity</h2>
+  <ul>
+    <li>Die <b>Erregbarkeit</b> von Neuronen ändert sich abhängig von vergangenen Stimuli (hauptsächlich durch Regulation der Ionenkanal-Leitfähigkeiten).</li>
+    <li>Beispiel: <b>stärkere Antwort nach Aktivitätsentzug</b> — die f-I-Kurve (Feuerrate über Step-Strom-Amplitude) liegt höher als die Kontrolle.</li>
+    <li><span class="arrow">&rarr;</span> <b>homöostatische Plastizität</b>.</li>
+    <li>Aber: auch das Gegenteil wird beobachtet (z. B. erhöhte Erregbarkeit nach starken Stimuli).</li>
+  </ul>
+  <div class="note"><b>Erklärung:</b> „Intrinsisch“ heißt: nicht die Synapse, sondern das Neuron selbst passt seine Erregbarkeit an. Homöostase = das Neuron hält seine mittlere Aktivität stabil: zu wenig Input &rarr; empfindlicher werden, zu viel &rarr; unempfindlicher.</div>
+</section>
+
+<section class="slide" id="s4">
+  <span class="slidenum">Folie 4</span>
+  <h2>Short-term plasticity (STP): Facilitation &amp; Depression</h2>
+  <p>Beleg (Markram et al. 1998): Derselbe Axon innerviert zwei verschiedene Ziele und zeigt <b>unterschiedliche</b> Kurzzeit-Dynamik — <b>Facilitation</b> im Interneuron, <b>Depression</b> im rechten Pyramidenneuron (Antwort auf denselben AP-Zug bei 30 Hz).</p>
+  <div class="note"><b>Erklärung:</b> Bemerkenswert: Ob eine Synapse verstärkt (facilitation) oder abschwächt (depression), hängt nicht nur vom Sender, sondern vom <b>Zieltyp</b> ab. Kurzzeitplastizität ist also zielspezifisch.</div>
+</section>
+
+<section class="slide" id="s5">
+  <span class="slidenum">Folie 5</span>
+  <h2>Neurotransmitter-Zyklus (Grundlage des STP-Modells)</h2>
+  <p>Das STP-Modell baut auf dem Vesikelzyklus im Axon-Terminal auf: synaptische Vesikel mit Neurotransmitter, spannungsgesteuerte Ca²⁺-Kanäle lösen die Freisetzung in den synaptischen Spalt aus, Rezeptoren auf der postsynaptischen Dichte binden den Transmitter, Neurotransmitter-Transporter nehmen ihn wieder auf (Recycling).</p>
+  <div class="note"><b>Erklärung:</b> Wichtig fürs nächste Modell: Transmitter ist eine <b>begrenzte Ressource</b>, die freigesetzt, entfernt und wieder aufgefüllt wird. Genau diese drei Zustände formalisiert das Tsodyks-Markram-Modell.</div>
+</section>
+
+<section class="slide" id="s6">
+  <span class="slidenum">Folie 6</span>
+  <h2>Der Tsodyks-Markram (TSO) Mechanismus</h2>
+  <p>Synapsen ändern ihre Wirksamkeit auf der Zeitskala von zehn ms bis Sekunden — und erholen sich wieder. Das TSO-Modell ist <b>phänomenologisch</b>, aber biophysikalisch inspiriert.</p>
+  <p><b>Drei Partitionen</b> (mögliche Zustände des Neurotransmitters), als Bruchteile mit \(R+E+I=1\):</p>
+  <ul>
+    <li><b>R</b>: Recovered (verfügbar)</li>
+    <li><b>E</b>: Effective (gerade wirksam)</li>
+    <li><b>I</b>: Inactive (inaktiv)</li>
+  </ul>
+  <ul>
+    <li>Synaptische Leitfähigkeit \(g^{syn}(t)\propto E(t)\).</li>
+    <li>Der beim AP zur Zeit \(t_s\) freigesetzte Anteil von \(R\) heißt <b>Utilization</b> \(U\): \(\Delta E = U\cdot R(t)\) zur Spike-Zeit \(t_s\).</li>
+    <li><b>Grundzustand</b> (nach langer Ruhe): \((R,E,I)_0 = (1,0,0)\).</li>
+  </ul>
+  <div class="note"><b>Erklärung:</b> Merkregel: \(R\) = „aufgeladen“, \(E\) = „feuert gerade“, \(I\) = „erschöpft, muss sich erholen“. \(U\) ist der Anteil, der pro Spike „abgefeuert“ wird — der Schlüsselparameter für Depression vs. Facilitation.</div>
+</section>
+
+<section class="slide" id="s7">
+  <span class="slidenum">Folie 7</span>
+  <h2>Formale Synapsen-Dynamik</h2>
+  <p>Mit präsynaptischen Spikes \(\rho(t)=\sum_s\delta(t-t_s)\):</p>
+  <div class="eqbox">\[ \text{(1) Release:}\quad \frac{\partial R}{\partial t} = -\rho(t)\,U\,R(t) + \frac{I(t)}{\tau_{rec}} \]</div>
+  <div class="eqbox">\[ \text{(2) Removal:}\quad \frac{\partial E}{\partial t} = +\rho(t)\,U\,R(t) - \frac{E}{\tau_{inact}} \]</div>
+  <div class="eqbox">\[ \text{(3) Reuptake:}\quad \frac{\partial I}{\partial t} = +\frac{E}{\tau_{inact}} - \frac{I}{\tau_{rec}} = -\Big(\frac{\partial E}{\partial t}+\frac{\partial R}{\partial t}\Big) \ \text{da } R+E+I=1 \]</div>
+  <p>(\(\tau_{inact}\approx\tau_{syn}\).) Bei konstantem \(U=U_0\) führt das bei hohen präsynaptischen Feuerraten zu <b>Vesikel-Depletion</b> <span class="arrow">&rarr;</span> <b>Short-term depression</b>.</p>
+  <p><b>Facilitation</b> ergänzt man über eine adaptive Utilization-Variable \(U(t)\), \(0<U<1\):</p>
+  <div class="eqbox">\[ \frac{\partial U}{\partial t} = -\frac{U}{\tau_{fac}} + \rho(t)\,U_0\,(1-U) \quad(\text{lädt Richtung 1}) \]</div>
+  <div class="note"><b>Erklärung:</b> Drei gekoppelte Bilanzgleichungen für den Transmitter. <b>Depression</b> = \(R\) wird schneller geleert als nachgefüllt. <b>Facilitation</b> = \(U\) wächst mit jedem Spike (mehr Freisetzung pro AP). Beide Effekte können gleichzeitig auftreten.</div>
+</section>
+
+<section class="slide" id="s8">
+  <span class="slidenum">Folie 8</span>
+  <h2>Beispiel &amp; Netzwerk-Anwendung</h2>
+  <h3>Beispiel: 1. Spike bei \(t_1\) nach Ruhe</h3>
+  <p>Sprung der Variablen beim ersten Spike (aus dem Grundzustand):</p>
+  <table>
+    <thead><tr><th>Variable</th><th>vor \(t_1\)</th><th>nach \(t_1\)</th></tr></thead>
+    <tbody>
+      <tr><td>\(U\)</td><td>0</td><td>\(U_0\)</td></tr>
+      <tr><td>\(R\)</td><td>1</td><td>\(1-U_0\)</td></tr>
+      <tr><td>\(E\ (\propto g^{syn})\)</td><td>0</td><td>\(U_0\)</td></tr>
+      <tr><td>\(I\)</td><td>0</td><td>0</td></tr>
+    </tbody>
+  </table>
+  <p>Danach relaxieren die Variablen wieder; der \(E\)-Verlauf pro Spike sieht aus wie eine <b>Difference of Exponentials (DoE)</b>.</p>
+  <h3>Netzwerk-Anwendung</h3>
+  <p>Selbst-Stabilisierung rekurrenter Netze über STP: exzitatorische (mit Depression) und inhibitorische Populationen (mit Facilitation) koppeln so, dass <span class="arrow">&rarr;</span> <b>die Netzwerkaktivität eine moderate Feuerrate hält</b>.</p>
+  <div class="note"><b>Erklärung:</b> STP wirkt als automatische Verstärkungsregelung: Bei hohen Raten dämpft Depression die Synapsen und verhindert, dass das rekurrente Netz „explodiert“. Ein eingebauter Stabilitätsmechanismus ohne externe Kontrolle.</div>
+</section>
+
+<section class="slide" id="s9">
+  <span class="slidenum">Folie 9</span>
+  <h2>STP-Simulationen</h2>
+  <p>Oben Messdaten (Markram et al. 1998): ein präsynaptisches Neuron mit drei verschiedenen Zielen zeigt je nach Ziel andere Kurzzeit-Dynamik. Unten Simulation (M. Petrovici) der vier Fälle — jeweils synaptische Leitfähigkeit \(g\) und Membranpotential \(u\) über der Zeit:</p>
+  <ul>
+    <li><b>static:</b> konstante Amplituden</li>
+    <li><b>depressing:</b> Amplituden nehmen ab</li>
+    <li><b>facilitating:</b> Amplituden nehmen zu</li>
+    <li><b>both:</b> erst Zunahme, dann Abnahme</li>
+  </ul>
+  <div class="note"><b>Erklärung:</b> Dasselbe TSO-Modell erzeugt je nach Parametern (\(U_0,\tau_{rec},\tau_{fac}\)) alle vier Verhaltensweisen. Das zeigt, wie flexibel schon ein einfaches phänomenologisches Modell die gemessene Vielfalt abbildet.</div>
+</section>
+
+<section class="slide" id="s10">
+  <span class="slidenum">Folie 10</span>
+  <h2>Long-term synaptic plasticity: LTP &amp; LTD</h2>
+  <p>Klassisches Experiment im <b>Hippocampus</b> (sehr geordnete Konnektivität, CA3 &rarr; CA1): Stimulus-Elektrode reizt die Fasern, Aufnahme-Elektrode misst das EPSP, eine zweite Elektrode kann per Voltage-Clamp das Potential \(u\) festhalten.</p>
+  <ul>
+    <li>Nach <b>starker</b> Stimulation: erhöhte EPSP-Amplitude, stabil über Minuten bis Stunden &rarr; <b>Long-term potentiation (LTP)</b>.</li>
+    <li>Nach <b>schwacher</b> Stimulation: verringerte EPSP-Amplitude &rarr; <b>Long-term depression (LTD)</b>.</li>
+    <li>2. Experiment: postsynaptisches Neuron auf ein festes Potential klemmen <span class="arrow">&rarr;</span> <b>spannungsabhängiger Übergang von LTD zu LTP</b>.</li>
+  </ul>
+  <div class="note"><b>Erklärung:</b> Anders als STP sind LTP/LTD <b>dauerhafte</b> Gewichtsänderungen — das biologische Substrat von Langzeitgedächtnis. Ob eine Synapse verstärkt oder abgeschwächt wird, hängt von Stärke/Frequenz und vom postsynaptischen Potential ab.</div>
+</section>
+
+<section class="slide" id="s11">
+  <span class="slidenum">Folie 11</span>
+  <h2>Rate-based experiments</h2>
+  <ul>
+    <li><b>Hochfrequente Stimulation (LTP):</b> 100 Hz, 1 s; postsynaptische Aktivität nicht kontrolliert/gemessen.</li>
+    <li><b>Niederfrequente Stimulation (LTD):</b> 1 Hz, 900 s.</li>
+    <li>Ergebnis: normierte fEPSP-Steigung steigt mit der Frequenz — niedrige Frequenz &rarr; \(<1\) (LTD), hohe Frequenz &rarr; \(>1\) (LTP).</li>
+  </ul>
+  <p>Effekt des postsynaptischen Potentials über Clamping (Potential konstant gehalten):</p>
+  <ul>
+    <li><b>Starke Depolarisation (0 mV) &rarr; LTP</b></li>
+    <li><b>Schwache Depolarisation (−30 mV) &rarr; LTD</b></li>
+    <li>Amplitude über \(V_m\): Minimum (LTD) um −30 mV, dann Anstieg zu LTP bei stärkerer Depolarisation.</li>
+  </ul>
+  <div class="note"><b>Erklärung:</b> Zwei „Stellschrauben“ für die Richtung der Langzeitplastizität: die <b>präsynaptische Frequenz</b> und das <b>postsynaptische Potential</b>. Beide laufen letztlich über den Ca²⁺-Einstrom zusammen (siehe NMDA-Folie).</div>
+</section>
+
+<section class="slide" id="s12">
+  <span class="slidenum">Folie 12</span>
+  <h2>STDP – What happens in between?</h2>
+  <ul>
+    <li>Das präzise <b>relative Timing</b> von prä- und postsynaptischen Spikes wird wichtig (Paarung mit Frequenz \(f\), Abstand \(\Delta t\)).</li>
+    <li>Das ist als <b>Spike-Timing Dependent Plasticity (STDP)</b> bekannt.</li>
+    <li>In der klassischen Form: <b>kausale</b> Paare („pre-before-post“) erzeugen <b>LTP</b>, <b>akausale</b> Paare („post-before-pre“) erzeugen <b>LTD</b>. (Bi &amp; Poo 1998.)</li>
+  </ul>
+  <div class="note"><b>Erklärung:</b> STDP verfeinert Hebb: Nicht nur „gemeinsam feuern“ zählt, sondern die <b>Reihenfolge</b>. Feuert die Präsynapse kurz <b>vor</b> der Postsynapse (kausal, „könnte mitverursacht haben“), wird die Synapse gestärkt — sonst geschwächt.</div>
+</section>
+
+<section class="slide" id="s13">
+  <span class="slidenum">Folie 13</span>
+  <h2>Timed-spike stimulation (Bi &amp; Poo)</h2>
+  <p>Durch Fortschritte bei Einzelzell-Messungen wurden solche Experimente auf zellulärer Ebene möglich. Timed-spike-Protokoll: prä- und postsynaptische Spikes mit definiertem Abstand \(\Delta t\). Die gemessene Änderung der EPSC-Amplitude über der Spike-Timing-Differenz zeigt die charakteristische STDP-Kurve: für \(\Delta t>0\) (pre vor post) Potenzierung, für \(\Delta t<0\) Depression.</p>
+  <div class="note"><b>Erklärung:</b> Die berühmte asymmetrische STDP-Kurve: ein scharfer Übergang bei \(\Delta t=0\). Wenige Millisekunden Timing-Unterschied entscheiden über Verstärkung oder Abschwächung — extrem zeitpräzises Lernen.</div>
+</section>
+
+<section class="slide" id="s14">
+  <span class="slidenum">Folie 14</span>
+  <h2>Hebb's postulate</h2>
+  <p>Die vorigen Experimente stimmen mit Hebbs Postulat überein:</p>
+  <p class="quote">„When an axon of cell A is near enough to excite a cell B and repeatedly or persistently takes part in firing it, some growth process or metabolic change takes place in one or both cells such that A's efficiency, as one of the cells firing B, is increased.“ — Donald O. Hebb, 1949</p>
+  <div class="note"><b>Erklärung:</b> Populär zusammengefasst: <b>„Cells that fire together, wire together.“</b> Wenn A regelmäßig hilft, B zum Feuern zu bringen, wird die Verbindung A&rarr;B stärker. Das ist die Urform aller Hebb'schen Lernregeln.</div>
+</section>
+
+<section class="slide" id="s15">
+  <span class="slidenum">Folie 15</span>
+  <h2>Hebb's rule &amp; a word of warning</h2>
+  <p>Dies wurde 1949 von Donald Hebb postuliert <span class="arrow">&rarr;</span> <b>„Hebb's rule“</b>.</p>
+  <h3>Warnung</h3>
+  <ul>
+    <li>STDP ist <b>nicht</b> einheitlich und universell!</li>
+    <li>Verschiedene STDP-Kurven werden beobachtet (unterschiedliche Formen und Vorzeichen).</li>
+    <li>Plastizität ist <b>nichtlinear</b>, z. B. bei <b>Tripletts</b> (pre-post-post oder pre-pre-post) <span class="arrow">&rarr;</span> <b>nicht</b> einfach „Summe von Spike-Paaren“.</li>
+    <li>Zudem: abhängig von Neuron, Gewicht, Ort, Spannung, Alter, Neuromodulatoren, …</li>
+  </ul>
+  <div class="note"><b>Erklärung:</b> Wichtiger Vorbehalt für die Klausur: Die schöne STDP-Kurve ist eine <b>Vereinfachung</b>. Reale Plastizität hängt von vielen Faktoren ab und lässt sich nicht auf paarweise Spike-Regeln reduzieren.</div>
+</section>
+
+<section class="slide" id="s16">
+  <span class="slidenum">Folie 16</span>
+  <h2>Biophysical foundations – a general dilemma</h2>
+  <p>Bei synaptischer Plastizität sind an jeder Synapse <b>diverse und komplexe biochemische Pfade</b> beteiligt, was zu einer verwirrenden Lage führt. Gleichzeitig können stark vereinfachte Plastizitätsmodelle leicht ein falsches und „gefährliches“ Bild erzeugen.</p>
+  <p>Die folgenden Folien zeigen einige fundamentale biophysikalische Prozesse, die alle <b>gleichzeitig</b> in einer Synapse vorhanden sein können.</p>
+  <div class="note"><b>Erklärung:</b> Übergang vom abstrakten Lernregel-Bild zur Biologie. Kernbotschaft: Eine echte Synapse ist keine einzelne „Gewichtszahl“, sondern ein Zusammenspiel vieler paralleler molekularer Prozesse.</div>
+</section>
+
+<section class="slide" id="s17">
+  <span class="slidenum">Folie 17</span>
+  <h2>Separating LTD and LTP</h2>
+  <p>Frage: Ist LTD nur „umgekehrtes/negatives“ LTP? Experiment (O'Connor et al. 2005) mit selektiven Inhibitoren:</p>
+  <ul>
+    <li>Mit <b>LTP-Inhibitor</b> (K252a): nur noch LTD sichtbar (fEPSP-Steigung \(<1\), frequenzunabhängig).</li>
+    <li>Mit <b>LTD-Inhibitor</b> (OA): nur noch LTP sichtbar (steigt mit Frequenz).</li>
+    <li>Kombination: bei niedriger Frequenz „gewinnt“ LTD, bei hoher Frequenz „gewinnt“ LTP.</li>
+  </ul>
+  <div class="keybox"><span class="arrow">&rarr;</span> LTD und LTP werden (zumindest teilweise) durch <b>verschiedene</b> biochemische Pfade realisiert.</div>
+  <div class="note"><b>Erklärung:</b> Elegantes Experiment: Schaltet man je einen Pfad pharmakologisch aus, bleibt der andere übrig. Also sind LTP und LTD zwei <b>eigenständige, sättigende</b> Prozesse, nicht ein einziges Vorzeichen-Kontinuum.</div>
+</section>
+
+<section class="slide" id="s18">
+  <span class="slidenum">Folie 18</span>
+  <h2>Die spezifische Rolle der NMDA-Rezeptoren (NMDAR)</h2>
+  <p>NMDARs steuern den Ca²⁺-Einstrom UND wirken als <b>Koinzidenzdetektoren</b> von:</p>
+  <ol class="n">
+    <li>präsynaptischer Neurotransmitter-Freisetzung (Glutamat)</li>
+    <li>postsynaptischem Membranpotential (Spannungsabhängigkeit)</li>
+  </ol>
+  <p>Die resultierende [Ca²⁺]-Konzentration löst z. B. den Einbau oder die Synthese <b>neuer AMPA-Rezeptoren</b> aus. Die Leitfähigkeit des NMDAR ist <b>spannungsabhängig</b> (Mg²⁺-Block bei negativem Potential; DOI: 10.1152/jn.2001.85.1.32).</p>
+  <p>Zur Erinnerung — wichtige Synapsentypen: AMPA (Glutamat, schnell, exzitatorisch), NMDA (Glutamat, ~20 ms, + Spannungsabhängigkeit), GABA_A (Cl⁻, inhibitorisch), ACh (Motoneuron).</p>
+  <div class="note"><b>Erklärung:</b> Der NMDAR ist das molekulare Herz von Hebb/STDP: Er öffnet nur, wenn <b>gleichzeitig</b> Glutamat da ist (Präsynapse aktiv) <b>und</b> die Membran depolarisiert ist (Postsynapse aktiv). Nur dann strömt Ca²⁺ ein und löst LTP aus — die „fire together“-Bedingung auf Molekülebene.</div>
+</section>
+
+<section class="slide" id="s19">
+  <span class="slidenum">Folie 19</span>
+  <h2>Molekulare Mechanismen: post-synaptische LTP &amp; LTD</h2>
+  <h3>1. Post-synaptische LTP</h3>
+  <p>Postsynaptische NMDARs werden aktiviert durch:</p>
+  <ol class="n">
+    <li>präsynaptische Glutamat-Freisetzung</li>
+    <li>ein hohes postsynaptisches Potential am Dendriten</li>
+  </ol>
+  <p><span class="arrow">&rarr;</span> Faktor 2 kann durch <b>rückwärts laufende Aktionspotentiale (back-propagating APs, bAP)</b> nach dem somatischen Spike realisiert werden. Die bAP-Amplitude nimmt mit der Distanz vom Soma entlang des (apikalen) Dendriten ab.</p>
+  <h3>2. Post-synaptische LTD</h3>
+  <p>Ohne das bAP ist der Ca²⁺-Einstrom kleiner und löst oft nur einen <b>LTD</b>-Pfad aus.</p>
+  <div class="note"><b>Erklärung:</b> Das bAP ist das „Rückmeldesignal“ der Postsynapse: Hat das Neuron gefeuert, läuft ein AP in die Dendriten zurück und liefert die nötige Depolarisation für starken Ca²⁺-Einstrom &rarr; LTP. Fehlt es, bleibt nur schwacher Einstrom &rarr; LTD. Das erklärt die Timing-Abhängigkeit von STDP mechanistisch.</div>
+</section>
+
+<section class="slide" id="s20">
+  <span class="slidenum">Folie 20</span>
+  <h2>Pre-synaptic LTD (Endocannabinoide)</h2>
+  <p>Pre-synaptische LTD entsteht durch die <b>Koinzidenz zweier Bedingungen</b>:</p>
+  <ol class="n">
+    <li>NMDA-<b>Autorezeptoren</b> werden beim präsynaptischen AP und der Glutamat-Freisetzung „automatisch“ aktiviert.</li>
+    <li><b>Retrograde Signalgebung</b> durch Endocannabinoide (CB), die aus der postsynaptischen Membran freigesetzt und von CB1-Rezeptoren „detektiert“ werden. Die CB-Konzentration scheint vom jüngsten mittleren postsynaptischen Membranpotential abzuhängen.</li>
+  </ol>
+  <p><span class="arrow">&rarr;</span> Löst Änderungen in der <b>präsynaptischen</b> Transmitter-Freisetzung aus. (Cold Spring Harb Perspect Biol 2012;4:a005728: homosynaptische vs. heterosynaptische Plastizität, mit/ohne retrograden Botenstoff.)</p>
+  <div class="note"><b>Erklärung:</b> Auch die <b>Präsynapse</b> kann lernen — gesteuert von einem <b>rückwärts</b> laufenden chemischen Signal (Endocannabinoide) von der Postsynapse. Das ist ein zweiter, unabhängiger Weg zur Koinzidenzdetektion und zeigt die Vielfalt aus Folie 16 konkret.</div>
+</section>
+
+<footer>Brain Inspired Computing · Lecture 10 — lesbare Transkription der handschriftlichen Folien (mit Erklärungen zur Klausurvorbereitung)</footer>
+
+</div>
+</body>
+</html>

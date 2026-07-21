@@ -130,16 +130,16 @@
 
 | Frage | Antwort | Begründung |
 |:-----:|:-------:|------------|
-| 9.1 | **D** | τ dν/dt = −ν + F(I) → Tiefpass, Rate folgt F(I) verzögert. |
-| 9.2 | **D** | WTA bei starker gegenseitiger Hemmung → zwei stabile Fixpunkte. |
-| 9.3 | **D** | WTA verstärkt kleine Input-Unterschiede, selektiert den stärksten Eingang. |
-| 9.4 | **A** | Stabilität via Phasenraum-/Nullklinen-Analyse (Linearisierung, Eigenwerte). |
-| 9.5 | **D** | Impulsantwort ∝ e<sup>−t/τ</sup> (abklingende Exponentielle). |
-| 9.6 | **C** | Schwache Hemmung → ein symmetrischer stabiler Fixpunkt (beide aktiv). |
-| 9.7 | **C** | Ohne Nichtlinearität nur ein gemittelter Fixpunkt, kein „Sieger". |
-| 9.8 | **C** | Ring-Attraktor → stabiler, lokal begrenzter Aktivitäts-Bump, der wandern kann. |
-| 9.9 | **A** | WTA-Ausgabe = Place-Code (welche Population gewinnt). |
-| 9.10 | **A** | WTA braucht Nichtlinearität in F + starke laterale Hemmung. |
+| 9.1 | **B** | Skalarprodukt **V**<sub>k</sub>·**x** maximal, wenn Input parallel zu **V**<sub>k</sub> (bei fester ‖**x**‖). |
+| 9.2 | **C** | **V**<sub>k</sub> = bevorzugtes Eingangsmuster / räumlicher Kernel → Template-Matching. |
+| 9.3 | **C** | Feed-forward-Neuron = Tiefpass, Green-Funktion G(t)=Θ(t)e<sup>−t/τ</sup>. |
+| 9.4 | **D** | Zwei kaskadierte Exponential-Tiefpässe → Difference of Exponentials. |
+| 9.5 | **A** | Konkurrenz über eine gemeinsame inhibitorische Population (geteilte Hemmung). |
+| 9.6 | **C** | Schwacher symmetrischer Input (V=4) → drei stabile Fixpunkte (symmetrisch + zwei Gewinner). |
+| 9.7 | **B** | Asymmetrischer Input (\|V<sub>1</sub>−V<sub>2</sub>\|>δ) → ein Fixpunkt, stärkerer Kanal gewinnt. |
+| 9.8 | **B** | V≳4,7 → Saddle-node-Bifurkation; kleinste Anfangsunterschiede entscheiden. |
+| 9.9 | **D** | Critical slowing down: langes Verharren im labilen Zustand, dann abrupte Umschaltung. |
+| 9.10 | **C** | Tuning + mehrere WTA-Populationen = Klassifikator (Detektion + eindeutiger Output-Code). |
 
 ## Vorlesung 10 · Plastizität: STP, LTP/LTD, STDP
 
@@ -156,6 +156,7 @@
 | 10.9 | **B** | Postsyn. Timing-Signal via rückwärtslaufende AP (bAP). |
 | 10.10 | **B** | Hebb: A kausal am Feuern von B beteiligt → Verbindung A→B verstärkt. |
 | 10.11 | **B** | STDP hat verschiedene Formen, ist nichtlinear/orts-/frequenzabhängig → nicht universell. |
+| 10.12 | **C** | Speicher-Argument: ~10¹⁵ Synapsen ≫ ~10¹⁰ Basenpaare (≈ 2 GB) → nicht genetisch kodierbar. |
 
 ## Vorlesung 11 · Neuromorphe Hardware & BrainScaleS
 
